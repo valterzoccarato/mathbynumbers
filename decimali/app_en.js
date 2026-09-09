@@ -1,6 +1,10 @@
 const CONST_COLORS = { pi: "#7c9eff", sqrt2: "#ffb86b", phi: "#6bffb8" };
 function colorFor(id) { return CONST_COLORS[id] || "#c792ea"; }
 
+// Le etichette in data/constants.json sono in italiano (dato condiviso tra le lingue):
+// qui le sovrascriviamo con la versione inglese, una sola volta al caricamento.
+const LABELS_EN = { pi: "Pi", sqrt2: "Square root of two", phi: "Golden ratio" };
+
 const state = {
   constants: [], // [{id,label,symbol,total_digits}]
   mode: "single", // "single" | "joint"
@@ -116,6 +120,7 @@ async function loadConstants() {
   const res = await fetch("data/constants.json");
   const data = await res.json();
   state.constants = data.constants || [];
+  state.constants.forEach((c) => { if (LABELS_EN[c.id]) c.label = LABELS_EN[c.id]; });
 
   if (state.constants.length === 0) {
     els.digitDisplay.innerHTML = '<span class="loading">No constants found.</span>';

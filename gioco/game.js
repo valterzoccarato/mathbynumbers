@@ -339,12 +339,16 @@ function checkCollisions() {
                 if (asteroid.size > 10 && asteroid.number > 0) {
                     const newSize = asteroid.size / 2;
 
-                    for (let k = 0; k < asteroid.number; k++) {
+                    // Genera meno figli del valore colpito, altrimenti la crescita è troppo esplosiva:
+                    // con numeri 1-9 la media di "asteroid.number" è 5, che porta a troppi asteroidi
+                    // in cascata. Dimezzando (arrotondato per eccesso) si tiene sotto controllo.
+                    const childCount = Math.ceil(asteroid.number / 2);
+                    for (let k = 0; k < childCount; k++) {
                         createAsteroid(asteroid.x, asteroid.y, newSize, randomNumber());
                     }
 
-                    // Aggiungi munizioni (doppio del numero colpito)
-                    ammo += asteroid.number * 2;
+                    // Munizioni proporzionali ai figli effettivamente creati
+                    ammo += childCount * 2;
                     updateAmmo();
                 }
 
