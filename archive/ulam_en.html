@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ulam spiral — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3;
+    --ink:#1C1B18;
+    --ink-soft:#5B584F;
+    --gold:#B8923C;
+    --gold-soft:#EFE4C8;
+    --teal:#2C5F56;
+    --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:960px;margin:0 auto;padding:0 24px;}
+
+  header{padding:28px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;}
+  nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;margin-left:28px;}
+  nav a:hover{color:var(--ink);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:36px;line-height:1.25;max-width:640px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:540px;margin-top:18px;}
+
+  .demo-section{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:48px 0 56px;}
+  .demo-grid{display:flex;gap:48px;align-items:flex-start;}
+  .demo-visual{flex:1.5;min-width:0;}
+  #ulam-svg{display:block;overflow:visible;}
+  .demo-panel{flex:1;padding-top:8px;}
+  .stat{margin-bottom:20px;}
+  .stat .num{font-family:'Source Serif 4',serif;font-size:26px;color:var(--teal);}
+  .stat .label{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+  .btn{font-family:'Inter',sans-serif;font-size:14px;border-radius:6px;padding:10px 16px;cursor:pointer;margin-right:10px;margin-bottom:10px;}
+  .btn-primary{background:var(--teal);color:#fff;border:1px solid var(--teal);}
+  .btn-primary:disabled{opacity:0.4;cursor:default;}
+  .btn-secondary{background:none;color:var(--ink-soft);border:1px solid var(--line);}
+
+  .cell{transition:fill 0.5s ease;}
+  .cell.prime{fill:var(--gold);}
+  .cell.prime.pulse{animation:pulse 0.6s ease;}
+  @keyframes pulse{0%{transform:scale(1);}40%{transform:scale(1.6);}100%{transform:scale(1);}}
+
+  .scale-section{padding:48px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;}
+  .scale-section h2{font-size:26px;margin-bottom:16px;}
+  .scale-section p{font-size:16px;color:var(--ink-soft);max-width:65ch;}
+  .scale-section p + p{margin-bottom:24px;}
+  #big-ulam{display:block;width:100%;max-width:600px;height:auto;aspect-ratio:1/1;margin:0 auto;background:var(--cream);border:1px solid var(--line);border-radius:8px;touch-action:none;}
+  .zoom-hint{font-size:13px !important;color:var(--ink-soft);text-align:center;margin-top:0 !important;}
+  .density-control{max-width:420px;margin:0 auto 18px;text-align:center;}
+  .density-control label{font-size:13px;color:var(--ink-soft);display:block;margin-bottom:6px;}
+  .density-control input[type=range]{width:100%;accent-color:var(--teal);}
+  .density-status{display:block;font-size:12px;color:var(--gold);height:16px;margin-top:2px;}
+  .zoom-controls{display:flex;justify-content:center;gap:8px;margin-top:14px;}
+  .zoom-controls .btn{margin:0;}
+
+  .construction-diagram{display:block;margin:28px auto 0;}
+
+  section.body-section{padding:56px 0;}
+  section.body-section h2{font-size:26px;margin-bottom:16px;}
+  section.body-section p{font-size:16px;color:var(--ink-soft);max-width:60ch;}
+  section.body-section p + p{margin-top:14px;}
+
+  .observe{padding:56px 0;border-top:1px solid var(--line);}
+  .observe h2{font-size:26px;margin-bottom:16px;}
+  .observe p{font-size:16px;color:var(--ink-soft);max-width:65ch;}
+  .observe p + p{margin-top:14px;}
+
+  .deep-dive{padding:56px 0;border-top:1px solid var(--line);background:var(--teal-soft);}
+  .deep-dive h2{font-size:26px;margin-bottom:24px;}
+  .deep-dive h3{font-size:18px;font-family:'Inter',sans-serif;font-weight:600;margin:28px 0 8px;}
+  .deep-dive h3:first-of-type{margin-top:0;}
+  .deep-dive p{font-size:16px;color:var(--ink-soft);max-width:65ch;margin:0;}
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:19px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px auto;max-width:65ch;}
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .demo-grid{flex-direction:column;}
+    .hero h1{font-size:29px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <div class="logo">mathbynumbers</div>
+    <nav>
+      <a href="#">Lessons</a>
+      <a href="#">Exercises</a>
+      <a href="#">Quizzes</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>The pattern hiding inside prime numbers</h1>
+    <p class="lead">In 1963, bored during a conference, mathematician Stanisław Ulam doodled the integers in a spiral on a sheet of paper. What he saw changed the way people looked at prime numbers ever since.</p>
+  </div>
+</section>
+
+<section class="demo-section">
+  <div class="wide">
+    <div class="demo-grid">
+      <div class="demo-visual">
+        <svg id="ulam-svg" width="100%" viewBox="0 0 680 680" role="img">
+          <title>Ulam spiral</title>
+          <desc>Grid of integers arranged in a spiral, with prime numbers progressively highlighted on click</desc>
+          <g id="cells"></g>
+        </svg>
+      </div>
+      <div class="demo-panel">
+        <div class="stat">
+          <div class="num" id="current-out">1</div>
+          <div class="label">current number</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="count-out">0</div>
+          <div class="label">primes found so far</div>
+        </div>
+        <button class="btn btn-primary" id="next-btn" onclick="revealNext()">Next prime number →</button><br>
+        <button class="btn btn-secondary" onclick="revealAll()">Show all</button>
+        <button class="btn btn-secondary" onclick="resetSpiral()">Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scale-section">
+  <div class="wide">
+    <h2>The same phenomenon, at a much larger scale</h2>
+    <p>Below is the same principle applied to many more numbers — up to a million. No more grid, no more cells, no more numbers written out: just a lit point for every prime number, everything else stays blank.</p>
+    <p>At this scale, the diagonal pattern you started noticing above becomes impossible to ignore. The dashed box shows where the portion of the spiral you explored just now sits inside this much bigger picture — a tiny detail compared to the whole.</p>
+    <p class="zoom-hint">Scroll to zoom in, drag to pan around.</p>
+    <div class="density-control">
+      <label for="density-slider">How many numbers to generate: <strong id="density-out">1,000,000</strong></label>
+      <input type="range" id="density-slider" min="0" max="7" step="1" value="5">
+      <span id="density-status" class="density-status"></span>
+    </div>
+    <canvas id="big-ulam" width="600" height="600"></canvas>
+    <div class="zoom-controls">
+      <button class="btn btn-secondary" id="zoom-out">−</button>
+      <button class="btn btn-secondary" id="zoom-reset">Reset</button>
+      <button class="btn btn-secondary" id="zoom-in">+</button>
+    </div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>How it's built</h2>
+    <p>Write out the integers 1, 2, 3, 4… arranged in a spiral, starting at the center and winding outward. No trick involved: the numbers simply follow their natural order, bent into this geometric shape instead of lined up in a row.</p>
+    <p>Then color every cell that contains a prime number, leaving the rest neutral. That's exactly what you can do yourself above, one number at a time.</p>
+    <svg id="construction-diagram" class="construction-diagram" width="260" height="260" viewBox="0 0 260 260"></svg>
+  </div>
+</section>
+
+<section class="observe">
+  <div class="wide">
+    <h2>What jumps out</h2>
+    <p>If prime numbers were distributed truly at random, you'd expect to see them scattered evenly across the grid, with no recognizable pattern. That's not what happens: as you keep revealing them, they tend to line up along clearly visible diagonals, some much denser than others.</p>
+    <p>Ulam noticed it by chance, drawing a few hundred numbers by hand. When the same pattern was later generated by computer across millions of numbers, the diagonals were still there, just as crisp as he'd first seen them on paper.</p>
+  </div>
+</section>
+
+<section class="deep-dive">
+  <div class="wrap">
+    <h2>A closer look</h2>
+
+    <h3>Discovered out of boredom</h3>
+    <p>Ulam was sitting through a talk he later described as "long and not very interesting." To pass the time, he started writing the integers in a spiral on graph paper, circling the primes as he spotted them. What struck him immediately was that the circles weren't scattered randomly at all — they kept lining up along diagonal lines, insistently.</p>
+
+    <h3>Why the diagonals form</h3>
+    <p>Each diagonal of the spiral corresponds to the values of a quadratic polynomial of the form:</p>
+    <div class="formula">f(n) = 4n² + bn + c</div>
+    <p>as n varies, for particular pairs of coefficients b and c. Some of these polynomials, for reasons rooted in number theory, produce a prime number far more often than expected. The most famous case is the polynomial discovered by Euler long before Ulam's spiral:</p>
+    <div class="formula">n² + n + 41</div>
+    <p>which returns a prime number for every n from 0 to 39 in a row — an almost comical case of arithmetic generosity. The densest diagonals in the Ulam spiral correspond to exactly this kind of polynomial, particularly "lucky" at producing primes.</p>
+
+    <h3>Still an open problem</h3>
+    <p>We can explain why some quadratic polynomials produce more primes than others, and we can even calculate how dense the diagonals ought to be, thanks to a prediction known as Hardy and Littlewood's Conjecture F. But that prediction remains, precisely, a conjecture: no one has yet rigorously proven why the pattern Ulam noticed is exactly as pronounced as it is. It's one of many cases where prime numbers show an order that's visible to the naked eye, but not yet fully understood by mathematics.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — math to look at, before you even read it</p>
+  </div>
+</footer>
+
+<script>
+function sieve(maxN){
+  const isPrime=new Uint8Array(maxN+1).fill(1);
+  isPrime[0]=0; if(maxN>=1) isPrime[1]=0;
+  for(let i=2;i*i<=maxN;i++){
+    if(isPrime[i]){
+      for(let j=i*i;j<=maxN;j+=i) isPrime[j]=0;
+    }
+  }
+  return isPrime;
+}
+
+function generateSpiral(maxN){
+  const positions=[null,{x:0,y:0}];
+  let x=0,y=0,dx=1,dy=0,segLen=1,passed=0,turns=0;
+  for(let n=2;n<=maxN;n++){
+    x+=dx;y+=dy;
+    positions.push({x,y});
+    passed++;
+    if(passed===segLen){
+      passed=0;
+      const ndx=-dy, ndy=dx;
+      dx=ndx;dy=ndy;
+      turns++;
+      if(turns%2===0) segLen++;
+    }
+  }
+  return positions;
+}
+
+const MAX_N=576;
+const isPrime=sieve(MAX_N);
+const positions=generateSpiral(MAX_N);
+const primesList=[];
+for(let n=2;n<=MAX_N;n++) if(isPrime[n]) primesList.push(n);
+
+let minX=0,maxX=0,minY=0,maxY=0;
+for(let n=1;n<=MAX_N;n++){
+  const p=positions[n];
+  minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x);
+  minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y);
+}
+const gridW=maxX-minX+1, gridH=maxY-minY+1;
+const margin=20;
+const cell=Math.min((680-margin*2)/gridW, (680-margin*2)/gridH);
+const offX=margin-minX*cell, offY=margin-minY*cell;
+
+const cellsGroup=document.getElementById('cells');
+let cellsHtml='';
+for(let n=1;n<=MAX_N;n++){
+  const p=positions[n];
+  const cx=p.x*cell+offX, cy=p.y*cell+offY;
+  const cw=cell-1.5;
+  cellsHtml+='<rect id="cell-'+n+'" class="cell" x="'+cx+'" y="'+cy+'" width="'+cw+'" height="'+cw+'" rx="1.5" fill="var(--line)" fill-opacity="0.5"/>';
+  cellsHtml+='<text id="label-'+n+'" x="'+(cx+cw/2)+'" y="'+(cy+cw/2)+'" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="Inter, sans-serif" fill="var(--ink-soft)">'+n+'</text>';
+}
+cellsGroup.innerHTML=cellsHtml;
+
+let revealIndex=0;
+
+function updateStats(current){
+  document.getElementById('current-out').textContent=current;
+  document.getElementById('count-out').textContent=revealIndex;
+  document.getElementById('next-btn').disabled = revealIndex>=primesList.length;
+  document.getElementById('next-btn').textContent = revealIndex>=primesList.length ? 'All primes revealed' : 'Next prime number →';
+}
+
+function revealNext(){
+  if(revealIndex>=primesList.length) return;
+  const p=primesList[revealIndex];
+  const el=document.getElementById('cell-'+p);
+  el.classList.add('prime','pulse');
+  setTimeout(()=>el.classList.remove('pulse'),600);
+  document.getElementById('label-'+p).setAttribute('fill','#fff');
+  revealIndex++;
+  updateStats(p);
+}
+
+function revealAll(){
+  while(revealIndex<primesList.length){
+    const p=primesList[revealIndex];
+    document.getElementById('cell-'+p).classList.add('prime');
+    document.getElementById('label-'+p).setAttribute('fill','#fff');
+    revealIndex++;
+  }
+  updateStats(primesList[primesList.length-1]);
+}
+
+function resetSpiral(){
+  for(let n=2;n<=MAX_N;n++){
+    document.getElementById('cell-'+n).classList.remove('prime','pulse');
+    document.getElementById('label-'+n).setAttribute('fill','var(--ink-soft)');
+  }
+  revealIndex=0;
+  updateStats(1);
+}
+
+updateStats(1);
+
+// Larger-scale representation, points only, with zoom and adjustable density
+const DENSITY_STEPS=[10000,50000,100000,250000,500000,1000000,2500000,5000000];
+const DEFAULT_STEP=5; // corresponds to 1,000,000
+
+const canvas=document.getElementById('big-ulam');
+const ctx=canvas.getContext('2d');
+const rootStyles=getComputedStyle(document.documentElement);
+const goldColor=rootStyles.getPropertyValue('--gold').trim();
+const tealColor=rootStyles.getPropertyValue('--teal').trim();
+
+let bigPX, bigPY, baseScale, baseOffX, baseOffY, smallCorner;
+const view={zoom:1, panX:0, panY:0};
+const MIN_ZOOM=1, MAX_ZOOM=600;
+
+function buildBigData(bigN){
+  const bigIsPrime=sieve(bigN);
+
+  // Generate the spiral "on the fly": only store prime positions
+  let bx=0,by=0,bdx=1,bdy=0,bSegLen=1,bPassed=0,bTurns=0;
+  let bMinX=0,bMaxX=0,bMinY=0,bMaxY=0;
+  const primesX=[], primesY=[];
+  smallCorner=null;
+  for(let n=1;n<=bigN;n++){
+    if(n>1){
+      bx+=bdx; by+=bdy;
+      bPassed++;
+      if(bPassed===bSegLen){
+        bPassed=0;
+        const ndx=-bdy, ndy=bdx;
+        bdx=ndx; bdy=ndy;
+        bTurns++;
+        if(bTurns%2===0) bSegLen++;
+      }
+    }
+    if(bx<bMinX)bMinX=bx; if(bx>bMaxX)bMaxX=bx;
+    if(by<bMinY)bMinY=by; if(by>bMaxY)bMaxY=by;
+    if(bigIsPrime[n]){ primesX.push(bx); primesY.push(by); }
+    if(n===MAX_N){ smallCorner={minX:bMinX,maxX:bMaxX,minY:bMinY,maxY:bMaxY}; }
+  }
+  bigPX=Float64Array.from(primesX); bigPY=Float64Array.from(primesY);
+  const bGridW=bMaxX-bMinX+1, bGridH=bMaxY-bMinY+1;
+  baseScale=Math.min(canvas.width/bGridW, canvas.height/bGridH);
+  const baseExtraX=(canvas.width-bGridW*baseScale)/2, baseExtraY=(canvas.height-bGridH*baseScale)/2;
+  baseOffX=baseExtraX-bMinX*baseScale; baseOffY=baseExtraY-bMinY*baseScale;
+}
+
+function drawBig(){
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.save();
+  ctx.translate(view.panX, view.panY);
+  ctx.scale(view.zoom, view.zoom);
+
+  ctx.fillStyle=goldColor;
+  const dotSize=Math.max(baseScale,1);
+  for(let i=0;i<bigPX.length;i++){
+    ctx.fillRect(bigPX[i]*baseScale+baseOffX, bigPY[i]*baseScale+baseOffY, dotSize, dotSize);
+  }
+
+  if(smallCorner){
+    ctx.strokeStyle=tealColor;
+    ctx.lineWidth=2/view.zoom;
+    ctx.setLineDash([5/view.zoom,4/view.zoom]);
+    ctx.strokeRect(
+      smallCorner.minX*baseScale+baseOffX, smallCorner.minY*baseScale+baseOffY,
+      (smallCorner.maxX-smallCorner.minX+1)*baseScale, (smallCorner.maxY-smallCorner.minY+1)*baseScale
+    );
+  }
+  ctx.restore();
+}
+
+function regenerateBig(stepIndex){
+  const bigN=DENSITY_STEPS[stepIndex];
+  document.getElementById('density-out').textContent=bigN.toLocaleString('en-US');
+  const statusEl=document.getElementById('density-status');
+  statusEl.textContent='Generating…';
+  setTimeout(()=>{
+    buildBigData(bigN);
+    view.zoom=1; view.panX=0; view.panY=0;
+    drawBig();
+    statusEl.textContent='';
+  }, 10);
+}
+
+document.getElementById('density-slider').addEventListener('input', (e)=>{
+  document.getElementById('density-out').textContent=DENSITY_STEPS[e.target.value].toLocaleString('en-US');
+});
+document.getElementById('density-slider').addEventListener('change', (e)=>{
+  regenerateBig(parseInt(e.target.value));
+});
+
+canvas.addEventListener('wheel', (e)=>{
+  e.preventDefault();
+  const rect=canvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)*(canvas.width/rect.width);
+  const my=(e.clientY-rect.top)*(canvas.height/rect.height);
+  const factor=e.deltaY<0 ? 1.25 : 0.8;
+  const newZoom=Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, view.zoom*factor));
+  view.panX = mx - (newZoom/view.zoom)*(mx-view.panX);
+  view.panY = my - (newZoom/view.zoom)*(my-view.panY);
+  view.zoom=newZoom;
+  drawBig();
+}, {passive:false});
+
+let dragging=false, lastX=0, lastY=0;
+canvas.addEventListener('mousedown', (e)=>{
+  dragging=true; lastX=e.clientX; lastY=e.clientY;
+  canvas.style.cursor='grabbing';
+});
+window.addEventListener('mousemove', (e)=>{
+  if(!dragging) return;
+  const rect=canvas.getBoundingClientRect();
+  const scaleFactor=canvas.width/rect.width;
+  view.panX += (e.clientX-lastX)*scaleFactor;
+  view.panY += (e.clientY-lastY)*scaleFactor;
+  lastX=e.clientX; lastY=e.clientY;
+  drawBig();
+});
+window.addEventListener('mouseup', ()=>{ dragging=false; canvas.style.cursor='grab'; });
+
+function zoomBy(factor){
+  const cx=canvas.width/2, cy=canvas.height/2;
+  const newZoom=Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, view.zoom*factor));
+  view.panX = cx - (newZoom/view.zoom)*(cx-view.panX);
+  view.panY = cy - (newZoom/view.zoom)*(cy-view.panY);
+  view.zoom=newZoom;
+  drawBig();
+}
+function resetBigView(){ view.zoom=1; view.panX=0; view.panY=0; drawBig(); }
+
+document.getElementById('zoom-in').addEventListener('click', ()=>zoomBy(1.6));
+document.getElementById('zoom-out').addEventListener('click', ()=>zoomBy(0.625));
+document.getElementById('zoom-reset').addEventListener('click', resetBigView);
+
+canvas.style.cursor='grab';
+buildBigData(DENSITY_STEPS[DEFAULT_STEP]);
+drawBig();
+
+// Explanatory diagram of the spiral path
+(function drawConstructionDiagram(){
+  const DN=36;
+  const dPositions=generateSpiral(DN);
+  let dMinX=0,dMaxX=0,dMinY=0,dMaxY=0;
+  for(let n=1;n<=DN;n++){
+    const p=dPositions[n];
+    dMinX=Math.min(dMinX,p.x); dMaxX=Math.max(dMaxX,p.x);
+    dMinY=Math.min(dMinY,p.y); dMaxY=Math.max(dMaxY,p.y);
+  }
+  const dGridW=dMaxX-dMinX+1, dGridH=dMaxY-dMinY+1;
+  const pad=24;
+  const dScale=Math.min((260-pad*2)/dGridW, (260-pad*2)/dGridH);
+  const dOffX=pad-dMinX*dScale, dOffY=pad-dMinY*dScale;
+
+  let points=[];
+  for(let n=1;n<=DN;n++){
+    const p=dPositions[n];
+    points.push([p.x*dScale+dOffX, p.y*dScale+dOffY]);
+  }
+  let pathD='M'+points.map(pt=>pt[0]+' '+pt[1]).join(' L');
+  let dotsHtml='';
+  points.forEach(pt=>{
+    dotsHtml+='<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="4.5" fill="var(--ink)"/>';
+  });
+  const svg=document.getElementById('construction-diagram');
+  svg.innerHTML='<path d="'+pathD+'" fill="none" stroke="var(--line)" stroke-width="1.5"/>'+dotsHtml;
+})();
+</script>
+
+</body>
+</html>

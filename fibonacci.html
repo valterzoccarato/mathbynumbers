@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La spirale di Fibonacci — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3;
+    --ink:#1C1B18;
+    --ink-soft:#5B584F;
+    --gold:#B8923C;
+    --gold-soft:#EFE4C8;
+    --teal:#2C5F56;
+    --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3{
+    font-family:'Source Serif 4',serif;
+    font-weight:500;
+    margin:0;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:960px;margin:0 auto;padding:0 24px;}
+
+  header{padding:28px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;}
+  nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;margin-left:28px;}
+  nav a:hover{color:var(--ink);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:38px;line-height:1.25;max-width:620px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:520px;margin-top:18px;}
+
+  .demo-section{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:48px 0 56px;}
+  .demo-grid{display:flex;gap:48px;align-items:flex-start;}
+  .demo-visual{flex:1.8;min-width:0;}
+  #spiral-svg{display:block;overflow:visible;}
+  .demo-panel{flex:1;padding-top:8px;}
+  .demo-panel label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:8px;}
+  input[type=range]{width:100%;accent-color:var(--teal);margin-bottom:24px;}
+  .stat{margin-bottom:20px;}
+  .stat .num{font-family:'Source Serif 4',serif;font-size:26px;color:var(--teal);}
+  .stat .label{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+  .seq-out{font-size:14px;color:var(--ink-soft);word-break:break-word;}
+
+  section.body-section{padding:56px 0;}
+  section.body-section h2{font-size:26px;margin-bottom:16px;}
+  section.body-section p{font-size:16px;color:var(--ink-soft);max-width:60ch;}
+  section.body-section p + p{margin-top:14px;}
+
+  .examples{padding:56px 0;border-top:1px solid var(--line);}
+  .examples h2{font-size:26px;margin-bottom:32px;}
+  .example-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .example{border-top:2px solid var(--gold);padding-top:14px;}
+  .example h3{font-size:16px;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:6px;}
+  .example p{font-size:14px;color:var(--ink-soft);margin:0;}
+
+  .deep-dive{padding:56px 0;border-top:1px solid var(--line);background:var(--teal-soft);}
+  .deep-dive h2{font-size:26px;margin-bottom:24px;}
+  .deep-dive h3{font-size:18px;font-family:'Inter',sans-serif;font-weight:600;margin:28px 0 8px;}
+  .deep-dive h3:first-of-type{margin-top:0;}
+  .deep-dive p{font-size:16px;color:var(--ink-soft);max-width:65ch;margin:0;}
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:19px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px auto;max-width:65ch;}
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .demo-grid{flex-direction:column;}
+    .example-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="home.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
+    <nav>
+      <a href="#">Lezioni</a>
+      <a href="#">Esercizi</a>
+      <a href="#">Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>La sequenza che disegna una spirale</h1>
+    <p class="lead">Fibonacci non è solo una lista di numeri che si sommano tra loro. È il pattern che la natura sceglie, ogni volta, per crescere nel modo più efficiente possibile.</p>
+  </div>
+</section>
+
+<section class="demo-section">
+  <div class="wide">
+    <div class="demo-grid">
+      <div class="demo-visual">
+        <svg id="spiral-svg" width="100%" viewBox="0 0 680 480" role="img">
+          <title>Spirale di Fibonacci</title>
+          <desc>Quadrati di lato crescente secondo Fibonacci con arco a spirale sovrapposto</desc>
+          <g id="squares"></g>
+          <path id="arc" fill="none" stroke="#B8923C" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="demo-panel">
+        <label for="n-slider">Numero di termini</label>
+        <input type="range" id="n-slider" min="3" max="10" value="7" step="1" oninput="render(this.value)">
+
+        <button id="toggle-btn" onclick="toggleSquares()" style="font-family:'Inter',sans-serif;font-size:13px;color:var(--teal);background:none;border:1px solid var(--teal);border-radius:6px;padding:8px 14px;cursor:pointer;margin-bottom:24px;">Mostra solo la curva</button>
+
+        <div class="stat">
+          <div class="num" id="ratio-out">1.6180</div>
+          <div class="label">rapporto tra gli ultimi due termini — non è ancora 1,618 esatto: più aumenti i termini, più ci si avvicina a φ, il numero aureo</div>
+        </div>
+        <div class="stat">
+          <div class="seq-out" id="seq-out"></div>
+          <div class="label">la sequenza generata</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>Come si costruisce</h2>
+    <p>Si parte da due quadrati di lato 1, posti fianco a fianco. Ogni quadrato successivo ha lato pari alla somma dei due lati precedenti — proprio come ogni numero della sequenza di Fibonacci è la somma dei due che lo precedono: 1, 1, 2, 3, 5, 8, 13, 21…</p>
+    <p>Collegando gli angoli dei quadrati con archi di cerchio, la curva che emerge approssima quella che viene chiamata spirale aurea — la stessa forma che ritroviamo, con sorprendente regolarità, in tutta la natura.</p>
+  </div>
+</section>
+
+<section class="examples">
+  <div class="wide">
+    <h2>Dove la troviamo davvero</h2>
+    <div class="example-grid">
+      <div class="example">
+        <h3>Conchiglie di nautilus</h3>
+        <p>La camera interna cresce seguendo esattamente questa proporzione, mantenendo la stessa forma man mano che l'animale si ingrandisce.</p>
+      </div>
+      <div class="example">
+        <h3>Semi di girasole</h3>
+        <p>I semi si dispongono in spirali che si incrociano, e il numero di spirali in ciascuna direzione è quasi sempre un numero di Fibonacci.</p>
+      </div>
+      <div class="example">
+        <h3>Bracci delle galassie</h3>
+        <p>Molte galassie a spirale, inclusa la Via Lattea, seguono una curva logaritmica molto vicina a quella aurea su scala cosmica.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="deep-dive">
+  <div class="wrap">
+    <h2>Uno sguardo più a fondo</h2>
+
+    <h3>Le origini</h3>
+    <p>Il nome viene da Leonardo Fibonacci, matematico pisano che nel 1202 pubblicò il <em>Liber Abaci</em>. Il problema che introduce la sequenza è quasi buffo: quante coppie di conigli si ottengono in un anno, partendo da una sola coppia, se ogni coppia adulta genera una nuova coppia ogni mese e ogni nuova coppia diventa fertile dopo un mese? La risposta, mese dopo mese, è 1, 1, 2, 3, 5, 8, 13… La sequenza esisteva già in matematica indiana secoli prima, ma il nome di Fibonacci le è rimasto addosso in Occidente.</p>
+
+    <h3>La regola che la genera</h3>
+    <p>La definizione è una relazione di ricorrenza:</p>
+    <div class="formula">F(1) = 1,&nbsp;&nbsp;F(2) = 1,&nbsp;&nbsp;F(n) = F(n−1) + F(n−2)</div>
+    <p>Semplicissima da scrivere, eppure genera un comportamento che si ritrova ovunque in natura — la semplicità della regola non implica affatto semplicità nei risultati.</p>
+
+    <h3>Perché il rapporto converge al numero aureo</h3>
+    <p>Chiamiamo φ (phi) il numero aureo, circa 1,6180339887. Se il rapporto F(n)/F(n−1) si stabilizza su un valore x quando n cresce, allora anche F(n+1)/F(n) tende allo stesso x. Ma:</p>
+    <div class="formula">F(n+1)/F(n) = (F(n) + F(n−1))/F(n) = 1 + F(n−1)/F(n) = 1 + 1/x</div>
+    <p>Quindi x deve soddisfare x = 1 + 1/x, cioè:</p>
+    <div class="formula">x² − x − 1 = 0</div>
+    <p>Risolvendo questa equazione di secondo grado si ottiene esattamente:</p>
+    <div class="formula">φ = (1 + √5) / 2</div>
+    <p>Il numero aureo non è quindi un'osservazione empirica sulla sequenza: è una conseguenza diretta e inevitabile della regola di ricorrenza stessa.</p>
+
+    <h3>Una formula che salta i passaggi</h3>
+    <p>C'è anche un modo per calcolare direttamente l'n-esimo numero di Fibonacci senza generare tutta la sequenza fino a lì: la formula di Binet,</p>
+    <div class="formula">F(n) = (φⁿ − ψⁿ) / √5</div>
+    <p>dove ψ = (1 − √5)/2 è l'altra soluzione della stessa equazione x² − x − 1 = 0. Sembra sorprendente che una formula con radici quadrate e potenze irrazionali produca sempre, esattamente, un numero intero — ma è proprio così: i termini irrazionali si cancellano a vicenda nella sottrazione.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — matematica da guardare, prima ancora che da leggere</p>
+  </div>
+</footer>
+
+<script>
+function fib(n){ let s=[1,1]; while(s.length<n) s.push(s[s.length-1]+s[s.length-2]); return s.slice(0,n); }
+
+function buildSquares(seq){
+  let sq=[{x:0,y:0,size:seq[0]},{x:seq[0],y:0,size:seq[1]}];
+  let L=0,R=seq[0]+seq[1],T=0,B=seq[0];
+  const dirs=['up','left','down','right'];
+  for(let i=2;i<seq.length;i++){
+    const s=seq[i], d=dirs[(i-2)%4];
+    let box;
+    if(d==='up'){ box={x:L,y:T-s,size:s}; T-=s; }
+    else if(d==='left'){ box={x:L-s,y:T,size:s}; L-=s; }
+    else if(d==='down'){ box={x:L,y:B,size:s}; B+=s; }
+    else { box={x:R,y:T,size:s}; R+=s; }
+    sq.push(box);
+  }
+  return {sq, bbox:{L,R,T,B}};
+}
+
+function arcFor(i, b){
+  const type=['right','up','left','down'][i%4];
+  const x=b.x,y=b.y,s=b.size;
+  if(type==='right') return {start:[x+s,y], end:[x,y+s]};
+  if(type==='up') return {start:[x,y+s], end:[x+s,y]};
+  if(type==='left') return {start:[x+s,y], end:[x,y]};
+  return {start:[x,y], end:[x+s,y+s]};
+}
+
+const colors=['#EFE4C8','#DCE9E6','#F0DCC8','#E9DCEF','#DCE4EF','#EFDCE0'];
+const strokes=['#B8923C','#2C5F56','#B87A3C','#7A4EB8','#3C6FB8','#B83C6A'];
+let showSquares=true;
+
+function toggleSquares(){
+  showSquares=!showSquares;
+  document.getElementById('toggle-btn').textContent = showSquares ? 'Mostra solo la curva' : 'Mostra i quadrati';
+  document.getElementById('squares').style.display = showSquares ? '' : 'none';
+}
+
+function render(n){
+  n=parseInt(n);
+  const seq=fib(n);
+  const {sq,bbox}=buildSquares(seq);
+  const w=bbox.R-bbox.L, h=bbox.B-bbox.T;
+  const margin=48;
+  const scale=Math.min((680-margin*2)/w, (480-margin*2)/h);
+  const offX=margin-bbox.L*scale, offY=margin-bbox.T*scale;
+
+  let squaresHtml='';
+  sq.forEach((b,i)=>{
+    const x=b.x*scale+offX, y=b.y*scale+offY, s=b.size*scale;
+    const c=i%colors.length;
+    squaresHtml+='<rect x="'+x+'" y="'+y+'" width="'+s+'" height="'+s+'" rx="2" fill="'+colors[c]+'" stroke="'+strokes[c]+'" stroke-width="1"/>';
+    if(s>18){
+      squaresHtml+='<text x="'+(x+s/2)+'" y="'+(y+s/2)+'" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="Inter, sans-serif" fill="'+strokes[c]+'">'+seq[i]+'</text>';
+    }
+  });
+  document.getElementById('squares').innerHTML=squaresHtml;
+
+  let d='';
+  sq.forEach((b,i)=>{
+    const a=arcFor(i,b);
+    const sx=a.start[0]*scale+offX, sy=a.start[1]*scale+offY;
+    const ex=a.end[0]*scale+offX, ey=a.end[1]*scale+offY;
+    const r=b.size*scale;
+    if(i===0) d+='M'+sx+' '+sy+' ';
+    d+='A'+r+' '+r+' 0 0 1 '+ex+' '+ey+' ';
+  });
+  document.getElementById('arc').setAttribute('d', d);
+
+  document.getElementById('seq-out').textContent=seq.join(', ');
+  const ratio=(seq[seq.length-1]/seq[seq.length-2]).toFixed(4);
+  document.getElementById('ratio-out').textContent=ratio;
+}
+render(7);
+</script>
+
+</body>
+</html>

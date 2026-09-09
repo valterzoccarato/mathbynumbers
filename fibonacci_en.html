@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Fibonacci spiral — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3;
+    --ink:#1C1B18;
+    --ink-soft:#5B584F;
+    --gold:#B8923C;
+    --gold-soft:#EFE4C8;
+    --teal:#2C5F56;
+    --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3{
+    font-family:'Source Serif 4',serif;
+    font-weight:500;
+    margin:0;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:960px;margin:0 auto;padding:0 24px;}
+
+  header{padding:28px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;}
+  nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;margin-left:28px;}
+  nav a:hover{color:var(--ink);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:38px;line-height:1.25;max-width:620px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:520px;margin-top:18px;}
+
+  .demo-section{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:48px 0 56px;}
+  .demo-grid{display:flex;gap:48px;align-items:flex-start;}
+  .demo-visual{flex:1.8;min-width:0;}
+  #spiral-svg{display:block;overflow:visible;}
+  .demo-panel{flex:1;padding-top:8px;}
+  .demo-panel label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:8px;}
+  input[type=range]{width:100%;accent-color:var(--teal);margin-bottom:24px;}
+  .stat{margin-bottom:20px;}
+  .stat .num{font-family:'Source Serif 4',serif;font-size:26px;color:var(--teal);}
+  .stat .label{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+  .seq-out{font-size:14px;color:var(--ink-soft);word-break:break-word;}
+
+  section.body-section{padding:56px 0;}
+  section.body-section h2{font-size:26px;margin-bottom:16px;}
+  section.body-section p{font-size:16px;color:var(--ink-soft);max-width:60ch;}
+  section.body-section p + p{margin-top:14px;}
+
+  .examples{padding:56px 0;border-top:1px solid var(--line);}
+  .examples h2{font-size:26px;margin-bottom:32px;}
+  .example-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .example{border-top:2px solid var(--gold);padding-top:14px;}
+  .example h3{font-size:16px;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:6px;}
+  .example p{font-size:14px;color:var(--ink-soft);margin:0;}
+
+  .deep-dive{padding:56px 0;border-top:1px solid var(--line);background:var(--teal-soft);}
+  .deep-dive h2{font-size:26px;margin-bottom:24px;}
+  .deep-dive h3{font-size:18px;font-family:'Inter',sans-serif;font-weight:600;margin:28px 0 8px;}
+  .deep-dive h3:first-of-type{margin-top:0;}
+  .deep-dive p{font-size:16px;color:var(--ink-soft);max-width:65ch;margin:0;}
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:19px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px auto;max-width:65ch;}
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .demo-grid{flex-direction:column;}
+    .example-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="home_en.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
+    <nav>
+      <a href="#">Lessons</a>
+      <a href="#">Exercises</a>
+      <a href="#">Quizzes</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>The sequence that draws a spiral</h1>
+    <p class="lead">Fibonacci isn't just a list of numbers adding into each other. It's the pattern nature keeps choosing, again and again, to grow in the most efficient way possible.</p>
+  </div>
+</section>
+
+<section class="demo-section">
+  <div class="wide">
+    <div class="demo-grid">
+      <div class="demo-visual">
+        <svg id="spiral-svg" width="100%" viewBox="0 0 680 480" role="img">
+          <title>Fibonacci spiral</title>
+          <desc>Squares with sides growing according to Fibonacci, with a spiral arc overlaid</desc>
+          <g id="squares"></g>
+          <path id="arc" fill="none" stroke="#B8923C" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="demo-panel">
+        <label for="n-slider">Number of terms</label>
+        <input type="range" id="n-slider" min="3" max="10" value="7" step="1" oninput="render(this.value)">
+
+        <button id="toggle-btn" onclick="toggleSquares()" style="font-family:'Inter',sans-serif;font-size:13px;color:var(--teal);background:none;border:1px solid var(--teal);border-radius:6px;padding:8px 14px;cursor:pointer;margin-bottom:24px;">Show curve only</button>
+
+        <div class="stat">
+          <div class="num" id="ratio-out">1.6180</div>
+          <div class="label">ratio between the last two terms — not exactly 1.618 yet: the more terms you add, the closer it gets to φ, the golden ratio</div>
+        </div>
+        <div class="stat">
+          <div class="seq-out" id="seq-out"></div>
+          <div class="label">the generated sequence</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>How it's built</h2>
+    <p>Start with two squares of side 1, placed side by side. Each following square has a side equal to the sum of the two previous ones — just like every number in the Fibonacci sequence is the sum of the two before it: 1, 1, 2, 3, 5, 8, 13, 21…</p>
+    <p>Connecting the corners of the squares with circular arcs, the curve that emerges approximates what's known as the golden spiral — the same shape that shows up, with surprising regularity, throughout nature.</p>
+  </div>
+</section>
+
+<section class="examples">
+  <div class="wide">
+    <h2>Where it actually shows up</h2>
+    <div class="example-grid">
+      <div class="example">
+        <h3>Nautilus shells</h3>
+        <p>The inner chamber grows following this exact proportion, keeping the same shape as the animal gets bigger.</p>
+      </div>
+      <div class="example">
+        <h3>Sunflower seeds</h3>
+        <p>The seeds arrange themselves in crossing spirals, and the number of spirals in each direction is almost always a Fibonacci number.</p>
+      </div>
+      <div class="example">
+        <h3>Galaxy arms</h3>
+        <p>Many spiral galaxies, including the Milky Way, follow a logarithmic curve remarkably close to the golden one, at a cosmic scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="deep-dive">
+  <div class="wrap">
+    <h2>A closer look</h2>
+
+    <h3>Where it comes from</h3>
+    <p>The name comes from Leonardo Fibonacci, a mathematician from Pisa who published the <em>Liber Abaci</em> in 1202. The problem that introduces the sequence is almost comical: how many pairs of rabbits do you end up with after a year, starting from a single pair, if every adult pair produces a new pair each month and every new pair becomes fertile after one month? The answer, month by month, is 1, 1, 2, 3, 5, 8, 13… The sequence had already appeared in Indian mathematics centuries earlier, but Fibonacci's name is the one that stuck in the West.</p>
+
+    <h3>The rule that generates it</h3>
+    <p>The definition is a recurrence relation:</p>
+    <div class="formula">F(1) = 1,&nbsp;&nbsp;F(2) = 1,&nbsp;&nbsp;F(n) = F(n−1) + F(n−2)</div>
+    <p>Simple to write down, yet it generates behavior that shows up everywhere in nature — the simplicity of the rule doesn't mean the results are simple at all.</p>
+
+    <h3>Why the ratio converges to the golden ratio</h3>
+    <p>Call φ (phi) the golden ratio, roughly 1.6180339887. If the ratio F(n)/F(n−1) settles on some value x as n grows, then F(n+1)/F(n) also tends to that same x. But:</p>
+    <div class="formula">F(n+1)/F(n) = (F(n) + F(n−1))/F(n) = 1 + F(n−1)/F(n) = 1 + 1/x</div>
+    <p>So x must satisfy x = 1 + 1/x, which means:</p>
+    <div class="formula">x² − x − 1 = 0</div>
+    <p>Solving that quadratic gives exactly:</p>
+    <div class="formula">φ = (1 + √5) / 2</div>
+    <p>The golden ratio isn't an empirical observation about the sequence, then — it's a direct, inevitable consequence of the recurrence rule itself.</p>
+
+    <h3>A formula that skips the steps</h3>
+    <p>There's also a way to calculate the n-th Fibonacci number directly, without generating the whole sequence up to it: Binet's formula,</p>
+    <div class="formula">F(n) = (φⁿ − ψⁿ) / √5</div>
+    <p>where ψ = (1 − √5)/2 is the other solution of that same equation x² − x − 1 = 0. It seems surprising that a formula full of square roots and irrational powers always produces, exactly, a whole number — but it does: the irrational parts cancel each other out in the subtraction.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — math to look at, before you even read it</p>
+  </div>
+</footer>
+
+<script>
+function fib(n){ let s=[1,1]; while(s.length<n) s.push(s[s.length-1]+s[s.length-2]); return s.slice(0,n); }
+
+function buildSquares(seq){
+  let sq=[{x:0,y:0,size:seq[0]},{x:seq[0],y:0,size:seq[1]}];
+  let L=0,R=seq[0]+seq[1],T=0,B=seq[0];
+  const dirs=['up','left','down','right'];
+  for(let i=2;i<seq.length;i++){
+    const s=seq[i], d=dirs[(i-2)%4];
+    let box;
+    if(d==='up'){ box={x:L,y:T-s,size:s}; T-=s; }
+    else if(d==='left'){ box={x:L-s,y:T,size:s}; L-=s; }
+    else if(d==='down'){ box={x:L,y:B,size:s}; B+=s; }
+    else { box={x:R,y:T,size:s}; R+=s; }
+    sq.push(box);
+  }
+  return {sq, bbox:{L,R,T,B}};
+}
+
+function arcFor(i, b){
+  const type=['right','up','left','down'][i%4];
+  const x=b.x,y=b.y,s=b.size;
+  if(type==='right') return {start:[x+s,y], end:[x,y+s]};
+  if(type==='up') return {start:[x,y+s], end:[x+s,y]};
+  if(type==='left') return {start:[x+s,y], end:[x,y]};
+  return {start:[x,y], end:[x+s,y+s]};
+}
+
+const colors=['#EFE4C8','#DCE9E6','#F0DCC8','#E9DCEF','#DCE4EF','#EFDCE0'];
+const strokes=['#B8923C','#2C5F56','#B87A3C','#7A4EB8','#3C6FB8','#B83C6A'];
+let showSquares=true;
+
+function toggleSquares(){
+  showSquares=!showSquares;
+  document.getElementById('toggle-btn').textContent = showSquares ? 'Show curve only' : 'Show squares';
+  document.getElementById('squares').style.display = showSquares ? '' : 'none';
+}
+
+function render(n){
+  n=parseInt(n);
+  const seq=fib(n);
+  const {sq,bbox}=buildSquares(seq);
+  const w=bbox.R-bbox.L, h=bbox.B-bbox.T;
+  const margin=48;
+  const scale=Math.min((680-margin*2)/w, (480-margin*2)/h);
+  const offX=margin-bbox.L*scale, offY=margin-bbox.T*scale;
+
+  let squaresHtml='';
+  sq.forEach((b,i)=>{
+    const x=b.x*scale+offX, y=b.y*scale+offY, s=b.size*scale;
+    const c=i%colors.length;
+    squaresHtml+='<rect x="'+x+'" y="'+y+'" width="'+s+'" height="'+s+'" rx="2" fill="'+colors[c]+'" stroke="'+strokes[c]+'" stroke-width="1"/>';
+    if(s>18){
+      squaresHtml+='<text x="'+(x+s/2)+'" y="'+(y+s/2)+'" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="Inter, sans-serif" fill="'+strokes[c]+'">'+seq[i]+'</text>';
+    }
+  });
+  document.getElementById('squares').innerHTML=squaresHtml;
+
+  let d='';
+  sq.forEach((b,i)=>{
+    const a=arcFor(i,b);
+    const sx=a.start[0]*scale+offX, sy=a.start[1]*scale+offY;
+    const ex=a.end[0]*scale+offX, ey=a.end[1]*scale+offY;
+    const r=b.size*scale;
+    if(i===0) d+='M'+sx+' '+sy+' ';
+    d+='A'+r+' '+r+' 0 0 1 '+ex+' '+ey+' ';
+  });
+  document.getElementById('arc').setAttribute('d', d);
+
+  document.getElementById('seq-out').textContent=seq.join(', ');
+  const ratio=(seq[seq.length-1]/seq[seq.length-2]).toFixed(4);
+  document.getElementById('ratio-out').textContent=ratio;
+}
+render(7);
+</script>
+
+</body>
+</html>

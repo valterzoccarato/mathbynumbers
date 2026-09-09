@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numeroids</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="hud">
+            <div class="score">Punteggio: <span id="score">0</span></div>
+            <div class="lives">Vite: <span id="lives">3</span></div>
+            <div class="ammo">Colpi: <span id="ammo">40</span></div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="gameOver" class="game-over hidden">
+            <h2>GAME OVER</h2>
+            <p>Punteggio finale: <span id="finalScore">0</span></p>
+            <button id="restartBtn">Rigioca</button>
+        </div>
+        <div id="startScreen" class="start-screen">
+            <h1>NUMEROIDS</h1>
+            <p>Usa le frecce per muoverti</p>
+            <p>Premi SPAZIO per sparare</p>
+            <p>Colpisci un numero: si dividerà in altrettanti asteroidi più piccoli</p>
+            <button id="startBtn">Inizia</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

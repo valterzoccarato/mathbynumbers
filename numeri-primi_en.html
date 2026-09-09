@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime numbers on the spiral — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3; --ink:#1C1B18; --ink-soft:#5B584F;
+    --gold:#B8923C; --gold-soft:#EFE4C8; --teal:#2C5F56; --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  header{padding:28px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;}
+  nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;margin-left:28px;}
+  nav a:hover{color:var(--ink);}
+
+  .hero{padding:64px 0 32px;}
+  .hero h1{font-size:36px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:600px;margin-top:18px;}
+
+  .tab-switcher{display:flex;justify-content:center;gap:8px;margin:8px 0 40px;}
+  .tab-btn{font-family:'Inter',sans-serif;font-size:15px;font-weight:500;padding:10px 22px;border-radius:24px;border:1px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;}
+  .tab-btn.active{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .demo-section{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:48px 0 56px;}
+  .demo-grid{display:flex;flex-direction:column;gap:28px;}
+  .demo-visual{width:100%;}
+  .demo-visual svg{display:block;overflow:visible;max-width:640px;margin:0 auto;}
+  .demo-panel{width:100%;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;padding-top:0;}
+  .demo-panel .stat{margin-bottom:0;text-align:center;}
+  .demo-panel .buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:0;}
+  .stat .num{font-family:'Source Serif 4',serif;font-size:26px;color:var(--teal);}
+  .stat .label{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+  .btn{font-family:'Inter',sans-serif;font-size:14px;border-radius:6px;padding:10px 16px;cursor:pointer;margin-right:10px;margin-bottom:10px;}
+  .btn-primary{background:var(--teal);color:#fff;border:1px solid var(--teal);}
+  .btn-primary:disabled{opacity:0.4;cursor:default;}
+  .btn-secondary{background:none;color:var(--ink-soft);border:1px solid var(--line);}
+
+  .cell{transition:fill 0.5s ease;}
+  .cell.prime{fill:var(--gold);}
+  .cell.prime.pulse{animation:pulse 0.6s ease;}
+  .node{transition:fill 0.5s ease;}
+  .node.prime{fill:var(--gold);}
+  .node.prime.pulse{animation:pulse 0.6s ease;}
+  @keyframes pulse{0%{transform:scale(1);}40%{transform:scale(1.7);}100%{transform:scale(1);}}
+
+  .scale-section{padding:48px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;}
+  .scale-section h2{font-size:26px;margin-bottom:16px;}
+  .scale-section p{font-size:16px;color:var(--ink-soft);max-width:65ch;}
+  .scale-section p + p{margin-bottom:24px;}
+  .scale-section canvas{display:block;width:100%;max-width:600px;height:auto;aspect-ratio:1/1;margin:0 auto;background:var(--cream);border:1px solid var(--line);border-radius:8px;touch-action:none;}
+  .zoom-hint{font-size:13px !important;color:var(--ink-soft);text-align:center;margin-top:0 !important;}
+  .density-control{max-width:420px;margin:0 auto 18px;text-align:center;}
+  .density-control label{font-size:13px;color:var(--ink-soft);display:block;margin-bottom:6px;}
+  .density-control input[type=range]{width:100%;accent-color:var(--teal);}
+  .density-status{display:block;font-size:12px;color:var(--gold);height:16px;margin-top:2px;}
+  .zoom-controls{display:flex;justify-content:center;gap:8px;margin-top:14px;}
+  .zoom-controls .btn{margin:0;}
+
+  .construction-diagram{display:block;margin:28px auto 0;}
+
+  section.body-section{padding:56px 0;}
+  section.body-section h2{font-size:26px;margin-bottom:16px;}
+  section.body-section p{font-size:16px;color:var(--ink-soft);max-width:60ch;}
+  section.body-section p + p{margin-top:14px;}
+
+  .observe{padding:56px 0;border-top:1px solid var(--line);}
+  .observe h2{font-size:26px;margin-bottom:16px;}
+  .observe p{font-size:16px;color:var(--ink-soft);max-width:65ch;}
+  .observe p + p{margin-top:14px;}
+
+  .deep-dive{padding:56px 0;border-top:1px solid var(--line);background:var(--teal-soft);}
+  .deep-dive h2{font-size:26px;margin-bottom:24px;}
+  .deep-dive h3{font-size:18px;font-family:'Inter',sans-serif;font-weight:600;margin:28px 0 8px;}
+  .deep-dive h3:first-of-type{margin-top:0;}
+  .deep-dive p{font-size:16px;color:var(--ink-soft);max-width:65ch;margin:0;}
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:19px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px auto;max-width:65ch;}
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .hero h1{font-size:29px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="home_en.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
+    <nav><a href="#">Lessons</a><a href="#">Exercises</a><a href="#">Quizzes</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>The pattern hiding inside prime numbers</h1>
+    <p class="lead">In 1963, bored during a conference, mathematician Stanisław Ulam doodled the integers in a spiral on a sheet of paper — and noticed the primes weren't scattered randomly at all. Here you can explore the same phenomenon on two different lattices: Ulam's classic square, and a triangular lattice with six directions.</p>
+  </div>
+  <div class="tab-switcher">
+    <button class="tab-btn active" id="tab-square">Square (Ulam)</button>
+    <button class="tab-btn" id="tab-triangle">Triangle</button>
+  </div>
+</section>
+
+<!-- ==================== PANNELLO QUADRATO ==================== -->
+<div id="panel-square" class="shape-panel">
+
+<section class="demo-section">
+  <div class="wide">
+    <div class="demo-grid">
+      <div class="demo-visual">
+        <svg id="sq-svg" width="100%" viewBox="0 0 680 680" role="img">
+          <title>Ulam spiral</title>
+          <desc>Grid of integers arranged in a spiral, with prime numbers progressively highlighted on click</desc>
+          <g id="sq-cells"></g>
+        </svg>
+      </div>
+      <div class="demo-panel">
+        <div class="stat">
+          <div class="num" id="sq-current-out">1</div>
+          <div class="label">current number</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="sq-count-out">0</div>
+          <div class="label">primes found so far</div>
+        </div>
+        <div class="buttons">
+          <button class="btn btn-primary" id="sq-next-btn">Next prime number →</button>
+          <button class="btn btn-secondary" id="sq-all-btn">Show all</button>
+          <button class="btn btn-secondary" id="sq-reset-btn">Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scale-section">
+  <div class="wide">
+    <h2>The same phenomenon, at a much larger scale</h2>
+    <p>Below is the same principle applied to many more numbers. No more grid, no more cells, no more numbers written out: just a lit point for every prime number, everything else stays blank.</p>
+    <p>At this scale, the diagonal pattern you started noticing above becomes impossible to ignore. The dashed box shows where the portion of the spiral you explored just now sits inside this much bigger picture.</p>
+    <p class="zoom-hint">Scroll to zoom in, drag to pan around.</p>
+    <div class="density-control">
+      <label for="sq-density-slider">How many numbers to generate: <strong id="sq-density-out">1,000,000</strong></label>
+      <input type="range" id="sq-density-slider" min="0" max="7" step="1" value="5">
+      <span id="sq-density-status" class="density-status"></span>
+    </div>
+    <canvas id="big-sq" width="600" height="600"></canvas>
+    <div class="zoom-controls">
+      <button class="btn btn-secondary" id="sq-zoom-out">−</button>
+      <button class="btn btn-secondary" id="sq-zoom-reset">Reset</button>
+      <button class="btn btn-secondary" id="sq-zoom-in">+</button>
+    </div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>How it's built</h2>
+    <p>Write out the integers 1, 2, 3, 4… arranged in a spiral, starting at the center and winding outward. No trick involved: the numbers simply follow their natural order, bent into this geometric shape instead of lined up in a row.</p>
+    <p>Then color every cell that contains a prime number, leaving the rest neutral. That's exactly what you can do yourself above, one number at a time.</p>
+    <svg id="sq-construction-diagram" class="construction-diagram" width="260" height="260" viewBox="0 0 260 260"></svg>
+  </div>
+</section>
+
+<section class="observe">
+  <div class="wide">
+    <h2>What jumps out</h2>
+    <p>If prime numbers were distributed truly at random, you'd expect to see them scattered evenly across the grid, with no recognizable pattern. That's not what happens: as you keep revealing them, they tend to line up along clearly visible diagonals, some much denser than others.</p>
+    <p>Ulam noticed it by chance, drawing a few hundred numbers by hand. When the same pattern was later generated by computer across millions of numbers, the diagonals were still there, just as crisp as he'd first seen them on paper.</p>
+  </div>
+</section>
+
+</div>
+
+<!-- ==================== PANNELLO TRIANGOLO ==================== -->
+<div id="panel-triangle" class="shape-panel" style="display:none">
+
+<section class="demo-section">
+  <div class="wide">
+    <div class="demo-grid">
+      <div class="demo-visual">
+        <svg id="tri-svg" width="100%" viewBox="0 0 680 680" role="img">
+          <title>Spiral on a triangular lattice</title>
+          <desc>Triangular mesh with numbers placed on the vertices in concentric rings, prime numbers progressively highlighted on click</desc>
+          <g id="tri-mesh"></g>
+          <g id="tri-nodes"></g>
+        </svg>
+      </div>
+      <div class="demo-panel">
+        <div class="stat">
+          <div class="num" id="tri-current-out">1</div>
+          <div class="label">current number</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="tri-count-out">0</div>
+          <div class="label">primes found so far</div>
+        </div>
+        <div class="buttons">
+          <button class="btn btn-primary" id="tri-next-btn">Next prime number →</button>
+          <button class="btn btn-secondary" id="tri-all-btn">Show all</button>
+          <button class="btn btn-secondary" id="tri-reset-btn">Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scale-section">
+  <div class="wide">
+    <h2>The same lattice, at a much larger scale</h2>
+    <p>Below is the same idea applied to many more numbers, with no more mesh or numbers written out: just a lit point for every prime.</p>
+    <p>The dashed hexagon shows where the portion you explored above by clicking sits inside this much bigger image.</p>
+    <p class="zoom-hint">Scroll to zoom in, drag to pan around.</p>
+    <div class="density-control">
+      <label for="tri-density-slider">How many numbers to generate: <strong id="tri-density-out">1,000,519</strong></label>
+      <input type="range" id="tri-density-slider" min="0" max="7" step="1" value="5">
+      <span id="tri-density-status" class="density-status"></span>
+    </div>
+    <canvas id="big-tri" width="600" height="600"></canvas>
+    <div class="zoom-controls">
+      <button class="btn btn-secondary" id="tri-zoom-out">−</button>
+      <button class="btn btn-secondary" id="tri-zoom-reset">Reset</button>
+      <button class="btn btn-secondary" id="tri-zoom-in">+</button>
+    </div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>How it's built</h2>
+    <p>Start from a central point (the number 1) and move along six possible directions, each 60° from the last — these are the natural directions of a triangular lattice, where every point has exactly six neighbors. The first ring around the center has 6 points, the second 12, the third 18: each ring always adds 6 more points than its radius.</p>
+    <p>Connecting every point to its neighbors automatically produces a mesh of equilateral triangles — the original tiling reappears on its own, without needing to be drawn separately.</p>
+    <svg id="tri-construction-diagram" class="construction-diagram" width="260" height="260" viewBox="0 0 260 260"></svg>
+  </div>
+</section>
+
+<section class="observe">
+  <div class="wide">
+    <h2>What to look for</h2>
+    <p>With Ulam's square spiral, prime numbers tended to line up along the diagonals. Here the lattice has a different symmetry — six main directions instead of four — so it's worth watching whether a similar pattern emerges along one or more of the six lattice directions as you reveal the primes.</p>
+    <p>The underlying mechanism is the same as before: moving in a straight line across a lattice always amounts to evaluating some polynomial (linear or quadratic) in the distance traveled, and some of these polynomials produce prime numbers more often than others.</p>
+  </div>
+</section>
+
+</div>
+
+<!-- ==================== APPROFONDIMENTO CONDIVISO ==================== -->
+<section class="deep-dive">
+  <div class="wrap">
+    <h2>A closer look</h2>
+
+    <h3>Why exactly these shapes tile the plane</h3>
+    <p>Only three regular polygons tile the plane without leaving gaps: the equilateral triangle, the square, and the hexagon. This has been known since ancient Greece, and it comes down to each polygon's interior angle: for identical copies to fit perfectly around a point, the interior angle has to divide 360° exactly. That only happens for 60° (triangle), 90° (square), and 120° (hexagon).</p>
+
+    <h3>Why the pentagon doesn't work</h3>
+    <p>A regular pentagon's interior angle is 108°, and 360° isn't a whole multiple of 108°. So to build something analogous with a pentagon, you'd either have to give up regularity (as in the Cairo pentagonal tiling) or give up true tiling altogether, using instead a radiating structure with the same 5-fold symmetry.</p>
+
+    <h3>The square: discovered out of boredom</h3>
+    <p>Ulam was sitting through a talk he later described as "long and not very interesting." To pass the time, he started writing the integers in a spiral on graph paper, circling the primes as he spotted them. What struck him immediately was that the circles weren't scattered randomly at all — they kept lining up along diagonal lines, insistently.</p>
+
+    <h3>Why the diagonals form</h3>
+    <p>Each diagonal of the square spiral corresponds to the values of a quadratic polynomial of the form:</p>
+    <div class="formula">f(n) = 4n² + bn + c</div>
+    <p>as n varies, for particular pairs of coefficients b and c. Some of these polynomials, for reasons rooted in number theory, produce a prime number far more often than expected. The most famous case is the polynomial discovered by Euler long before Ulam's spiral:</p>
+    <div class="formula">n² + n + 41</div>
+    <p>which returns a prime number for every n from 0 to 39 in a row — an almost comical case of arithmetic generosity. The densest diagonals in the square spiral correspond to exactly this kind of polynomial, particularly "lucky" at producing primes.</p>
+
+    <h3>The triangle: a coincidence discovered along the way</h3>
+    <p>The triangular lattice you explored above stops at exactly the thirteenth ring, for a total of:</p>
+    <div class="formula">1 + 3 · 13 · 14 = 547 punti</div>
+    <p>And purely by chance, 547 is itself a prime number — in fact, it's exactly the 101st prime number overall. The ring closes, then, right at the moment the prime counter passes 100.</p>
+
+    <h3>Still an open problem</h3>
+    <p>We can explain why some polynomials produce more primes than others on a given lattice, and we can even calculate how dense the diagonals or main directions ought to be, thanks to a prediction known as Hardy and Littlewood's Conjecture F. But that prediction remains, precisely, a conjecture: no one has yet rigorously proven why the patterns observed — on the square as on the triangle — are exactly as pronounced as they are. It's one of many cases where prime numbers show an order that's visible to the naked eye, but not yet fully understood by mathematics.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — math to look at, before you even read it</p>
+  </div>
+</footer>
+
+<script>
+// ==================== SELETTORE A TAB ====================
+function showPanel(which){
+  document.getElementById('panel-square').style.display = which==='square' ? '' : 'none';
+  document.getElementById('panel-triangle').style.display = which==='triangle' ? '' : 'none';
+  document.getElementById('tab-square').classList.toggle('active', which==='square');
+  document.getElementById('tab-triangle').classList.toggle('active', which==='triangle');
+}
+document.getElementById('tab-square').addEventListener('click', ()=>showPanel('square'));
+document.getElementById('tab-triangle').addEventListener('click', ()=>showPanel('triangle'));
+
+// ==================== QUADRATO (ULAM) ====================
+(function(){
+  function sieve(maxN){
+    const isPrime=new Uint8Array(maxN+1).fill(1);
+    isPrime[0]=0; if(maxN>=1) isPrime[1]=0;
+    for(let i=2;i*i<=maxN;i++){
+      if(isPrime[i]) for(let j=i*i;j<=maxN;j+=i) isPrime[j]=0;
+    }
+    return isPrime;
+  }
+
+  function generateSpiral(maxN){
+    const positions=[null,{x:0,y:0}];
+    let x=0,y=0,dx=1,dy=0,segLen=1,passed=0,turns=0;
+    for(let n=2;n<=maxN;n++){
+      x+=dx;y+=dy;
+      positions.push({x,y});
+      passed++;
+      if(passed===segLen){
+        passed=0;
+        const ndx=-dy, ndy=dx;
+        dx=ndx;dy=ndy;
+        turns++;
+        if(turns%2===0) segLen++;
+      }
+    }
+    return positions;
+  }
+
+  const MAX_N=576;
+  const isPrime=sieve(MAX_N);
+  const positions=generateSpiral(MAX_N);
+  const primesList=[];
+  for(let n=2;n<=MAX_N;n++) if(isPrime[n]) primesList.push(n);
+
+  let minX=0,maxX=0,minY=0,maxY=0;
+  for(let n=1;n<=MAX_N;n++){
+    const p=positions[n];
+    minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x);
+    minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y);
+  }
+  const gridW=maxX-minX+1, gridH=maxY-minY+1;
+  const margin=20;
+  const cell=Math.min((680-margin*2)/gridW, (680-margin*2)/gridH);
+  const offX=margin-minX*cell, offY=margin-minY*cell;
+
+  const cellsGroup=document.getElementById('sq-cells');
+  let cellsHtml='';
+  for(let n=1;n<=MAX_N;n++){
+    const p=positions[n];
+    const cx=p.x*cell+offX, cy=p.y*cell+offY;
+    const cw=cell-1.5;
+    cellsHtml+='<rect id="sq-cell-'+n+'" class="cell" x="'+cx+'" y="'+cy+'" width="'+cw+'" height="'+cw+'" rx="1.5" fill="var(--line)" fill-opacity="0.5"/>';
+    cellsHtml+='<text id="sq-label-'+n+'" x="'+(cx+cw/2)+'" y="'+(cy+cw/2)+'" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="Inter, sans-serif" fill="var(--ink-soft)">'+n+'</text>';
+  }
+  cellsGroup.innerHTML=cellsHtml;
+
+  let revealIndex=0;
+  function updateStats(current){
+    document.getElementById('sq-current-out').textContent=current;
+    document.getElementById('sq-count-out').textContent=revealIndex;
+    document.getElementById('sq-next-btn').disabled = revealIndex>=primesList.length;
+    document.getElementById('sq-next-btn').textContent = revealIndex>=primesList.length ? 'All primes revealed' : 'Next prime number →';
+  }
+  function revealNext(){
+    if(revealIndex>=primesList.length) return;
+    const p=primesList[revealIndex];
+    const el=document.getElementById('sq-cell-'+p);
+    el.classList.add('prime','pulse');
+    setTimeout(()=>el.classList.remove('pulse'),600);
+    document.getElementById('sq-label-'+p).setAttribute('fill','#fff');
+    revealIndex++;
+    updateStats(p);
+  }
+  function revealAll(){
+    while(revealIndex<primesList.length){
+      const p=primesList[revealIndex];
+      document.getElementById('sq-cell-'+p).classList.add('prime');
+      document.getElementById('sq-label-'+p).setAttribute('fill','#fff');
+      revealIndex++;
+    }
+    updateStats(primesList[primesList.length-1]);
+  }
+  function resetSpiral(){
+    for(let n=2;n<=MAX_N;n++){
+      document.getElementById('sq-cell-'+n).classList.remove('prime','pulse');
+      document.getElementById('sq-label-'+n).setAttribute('fill','var(--ink-soft)');
+    }
+    revealIndex=0;
+    updateStats(1);
+  }
+  document.getElementById('sq-next-btn').addEventListener('click', revealNext);
+  document.getElementById('sq-all-btn').addEventListener('click', revealAll);
+  document.getElementById('sq-reset-btn').addEventListener('click', resetSpiral);
+  updateStats(1);
+
+  // Scala grande, con zoom e densità regolabile
+  const DENSITY_STEPS=[10000,50000,100000,250000,500000,1000000,2500000,5000000];
+  const DEFAULT_STEP=5;
+
+  const canvas=document.getElementById('big-sq');
+  const ctx=canvas.getContext('2d');
+  const rootStyles=getComputedStyle(document.documentElement);
+  const goldColor=rootStyles.getPropertyValue('--gold').trim();
+  const tealColor=rootStyles.getPropertyValue('--teal').trim();
+
+  let bigPX, bigPY, baseScale, baseOffX, baseOffY, smallCorner;
+  const view={zoom:1, panX:0, panY:0};
+  const MIN_ZOOM=1, MAX_ZOOM=600;
+
+  function buildBigData(bigN){
+    const bigIsPrime=sieve(bigN);
+    let bx=0,by=0,bdx=1,bdy=0,bSegLen=1,bPassed=0,bTurns=0;
+    let bMinX=0,bMaxX=0,bMinY=0,bMaxY=0;
+    const primesX=[], primesY=[];
+    smallCorner=null;
+    for(let n=1;n<=bigN;n++){
+      if(n>1){
+        bx+=bdx; by+=bdy;
+        bPassed++;
+        if(bPassed===bSegLen){
+          bPassed=0;
+          const ndx=-bdy, ndy=bdx;
+          bdx=ndx; bdy=ndy;
+          bTurns++;
+          if(bTurns%2===0) bSegLen++;
+        }
+      }
+      if(bx<bMinX)bMinX=bx; if(bx>bMaxX)bMaxX=bx;
+      if(by<bMinY)bMinY=by; if(by>bMaxY)bMaxY=by;
+      if(bigIsPrime[n]){ primesX.push(bx); primesY.push(by); }
+      if(n===MAX_N){ smallCorner={minX:bMinX,maxX:bMaxX,minY:bMinY,maxY:bMaxY}; }
+    }
+    bigPX=Float64Array.from(primesX); bigPY=Float64Array.from(primesY);
+    const bGridW=bMaxX-bMinX+1, bGridH=bMaxY-bMinY+1;
+    baseScale=Math.min(canvas.width/bGridW, canvas.height/bGridH);
+    const baseExtraX=(canvas.width-bGridW*baseScale)/2, baseExtraY=(canvas.height-bGridH*baseScale)/2;
+    baseOffX=baseExtraX-bMinX*baseScale; baseOffY=baseExtraY-bMinY*baseScale;
+  }
+
+  function drawBig(){
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.save();
+    ctx.translate(view.panX, view.panY);
+    ctx.scale(view.zoom, view.zoom);
+    ctx.fillStyle=goldColor;
+    const dotSize=Math.max(baseScale,1);
+    for(let i=0;i<bigPX.length;i++){
+      ctx.fillRect(bigPX[i]*baseScale+baseOffX, bigPY[i]*baseScale+baseOffY, dotSize, dotSize);
+    }
+    if(smallCorner){
+      ctx.strokeStyle=tealColor;
+      ctx.lineWidth=2/view.zoom;
+      ctx.setLineDash([5/view.zoom,4/view.zoom]);
+      ctx.strokeRect(
+        smallCorner.minX*baseScale+baseOffX, smallCorner.minY*baseScale+baseOffY,
+        (smallCorner.maxX-smallCorner.minX+1)*baseScale, (smallCorner.maxY-smallCorner.minY+1)*baseScale
+      );
+    }
+    ctx.restore();
+  }
+
+  function regenerateBig(stepIndex){
+    const bigN=DENSITY_STEPS[stepIndex];
+    document.getElementById('sq-density-out').textContent=bigN.toLocaleString('en-US');
+    const statusEl=document.getElementById('sq-density-status');
+    statusEl.textContent='Generating…';
+    setTimeout(()=>{
+      buildBigData(bigN);
+      view.zoom=1; view.panX=0; view.panY=0;
+      drawBig();
+      statusEl.textContent='';
+    }, 10);
+  }
+
+  document.getElementById('sq-density-slider').addEventListener('input', (e)=>{
+    document.getElementById('sq-density-out').textContent=DENSITY_STEPS[e.target.value].toLocaleString('en-US');
+  });
+  document.getElementById('sq-density-slider').addEventListener('change', (e)=>{
+    regenerateBig(parseInt(e.target.value));
+  });
+
+  canvas.addEventListener('wheel', (e)=>{
+    e.preventDefault();
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(canvas.width/rect.width);
+    const my=(e.clientY-rect.top)*(canvas.height/rect.height);
+    const factor=e.deltaY<0 ? 1.25 : 0.8;
+    const newZoom=Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, view.zoom*factor));
+    view.panX = mx - (newZoom/view.zoom)*(mx-view.panX);
+    view.panY = my - (newZoom/view.zoom)*(my-view.panY);
+    view.zoom=newZoom;
+    drawBig();
+  }, {passive:false});
+
+  let dragging=false, lastX=0, lastY=0;
+  canvas.addEventListener('mousedown', (e)=>{
+    dragging=true; lastX=e.clientX; lastY=e.clientY;
+    canvas.style.cursor='grabbing';
+  });
+  window.addEventListener('mousemove', (e)=>{
+    if(!dragging) return;
+    const rect=canvas.getBoundingClientRect();
+    const scaleFactor=canvas.width/rect.width;
+    view.panX += (e.clientX-lastX)*scaleFactor;
+    view.panY += (e.clientY-lastY)*scaleFactor;
+    lastX=e.clientX; lastY=e.clientY;
+    drawBig();
+  });
+  window.addEventListener('mouseup', ()=>{ if(dragging){ dragging=false; canvas.style.cursor='grab'; } });
+
+  function zoomBy(factor){
+    const cx=canvas.width/2, cy=canvas.height/2;
+    const newZoom=Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, view.zoom*factor));
+    view.panX = cx - (newZoom/view.zoom)*(cx-view.panX);
+    view.panY = cy - (newZoom/view.zoom)*(cy-view.panY);
+    view.zoom=newZoom;
+    drawBig();
+  }
+  function resetBigView(){ view.zoom=1; view.panX=0; view.panY=0; drawBig(); }
+
+  document.getElementById('sq-zoom-in').addEventListener('click', ()=>zoomBy(1.6));
+  document.getElementById('sq-zoom-out').addEventListener('click', ()=>zoomBy(0.625));
+  document.getElementById('sq-zoom-reset').addEventListener('click', resetBigView);
+
+  canvas.style.cursor='grab';
+  buildBigData(DENSITY_STEPS[DEFAULT_STEP]);
+  drawBig();
+
+  // Diagramma esplicativo del percorso a spirale
+  (function drawConstructionDiagram(){
+    const DN=36;
+    const dPositions=generateSpiral(DN);
+    let dMinX=0,dMaxX=0,dMinY=0,dMaxY=0;
+    for(let n=1;n<=DN;n++){
+      const p=dPositions[n];
+      dMinX=Math.min(dMinX,p.x); dMaxX=Math.max(dMaxX,p.x);
+      dMinY=Math.min(dMinY,p.y); dMaxY=Math.max(dMaxY,p.y);
+    }
+    const dGridW=dMaxX-dMinX+1, dGridH=dMaxY-dMinY+1;
+    const pad=24;
+    const dScale=Math.min((260-pad*2)/dGridW, (260-pad*2)/dGridH);
+    const dOffX=pad-dMinX*dScale, dOffY=pad-dMinY*dScale;
+    let points=[];
+    for(let n=1;n<=DN;n++){
+      const p=dPositions[n];
+      points.push([p.x*dScale+dOffX, p.y*dScale+dOffY]);
+    }
+    let pathD='M'+points.map(pt=>pt[0]+' '+pt[1]).join(' L');
+    let dotsHtml='';
+    points.forEach(pt=>{
+      dotsHtml+='<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="4.5" fill="var(--ink)"/>';
+    });
+    document.getElementById('sq-construction-diagram').innerHTML='<path d="'+pathD+'" fill="none" stroke="var(--line)" stroke-width="1.5"/>'+dotsHtml;
+  })();
+})();
+
+// ==================== TRIANGOLO ====================
+(function(){
+  function sieve(maxN){
+    const isPrime=new Uint8Array(maxN+1).fill(1);
+    isPrime[0]=0; if(maxN>=1) isPrime[1]=0;
+    for(let i=2;i*i<=maxN;i++){
+      if(isPrime[i]) for(let j=i*i;j<=maxN;j+=i) isPrime[j]=0;
+    }
+    return isPrime;
+  }
+
+  const DIRS=[{q:1,r:0},{q:1,r:-1},{q:0,r:-1},{q:-1,r:0},{q:-1,r:1},{q:0,r:1}];
+
+  function hexRing(radius){
+    if(radius===0) return [{q:0,r:0}];
+    let results=[];
+    let hex={q:DIRS[4].q*radius, r:DIRS[4].r*radius};
+    for(let i=0;i<6;i++){
+      for(let j=0;j<radius;j++){
+        results.push({q:hex.q,r:hex.r});
+        hex={q:hex.q+DIRS[i].q, r:hex.r+DIRS[i].r};
+      }
+    }
+    return results;
+  }
+
+  function generateSpiral(maxRing){
+    const positions=[null,{q:0,r:0}];
+    let n=2;
+    for(let radius=1;radius<=maxRing;radius++){
+      for(const hex of hexRing(radius)){ positions[n]=hex; n++; }
+    }
+    return positions;
+  }
+
+  function axialToPixel(q,r){
+    return {x: 1.5*q, y: Math.sqrt(3)*(r+q/2)};
+  }
+
+  const MAX_RING=13;
+  const MAX_N=1+3*MAX_RING*(MAX_RING+1);
+  const isPrime=sieve(MAX_N);
+  const positions=generateSpiral(MAX_RING);
+  const primesList=[];
+  for(let n=2;n<=MAX_N;n++) if(isPrime[n]) primesList.push(n);
+
+  let minX=0,maxX=0,minY=0,maxY=0;
+  const coordMap=new Map();
+  for(let n=1;n<=MAX_N;n++){
+    const p=axialToPixel(positions[n].q,positions[n].r);
+    minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);
+    minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);
+    coordMap.set(positions[n].q+','+positions[n].r, n);
+  }
+  const gridW=maxX-minX, gridH=maxY-minY;
+  const margin=24;
+  const scale=Math.min((680-margin*2)/gridW, (680-margin*2)/gridH);
+  const offX=margin-minX*scale, offY=margin-minY*scale;
+  const dotR=scale*0.42;
+
+  let meshHtml='';
+  for(let n=1;n<=MAX_N;n++){
+    const q=positions[n].q, r=positions[n].r;
+    const p1=axialToPixel(q,r);
+    [DIRS[0],DIRS[1],DIRS[2]].forEach(d=>{
+      const nq=q+d.q, nr=r+d.r;
+      const neighborN=coordMap.get(nq+','+nr);
+      if(neighborN){
+        const p2=axialToPixel(nq,nr);
+        meshHtml+='<line x1="'+(p1.x*scale+offX)+'" y1="'+(p1.y*scale+offY)+'" x2="'+(p2.x*scale+offX)+'" y2="'+(p2.y*scale+offY)+'" stroke="var(--line)" stroke-width="1"/>';
+      }
+    });
+  }
+  document.getElementById('tri-mesh').innerHTML=meshHtml;
+
+  let nodesHtml='';
+  for(let n=1;n<=MAX_N;n++){
+    const p=axialToPixel(positions[n].q,positions[n].r);
+    const cx=p.x*scale+offX, cy=p.y*scale+offY;
+    nodesHtml+='<circle id="tri-node-'+n+'" class="node" cx="'+cx+'" cy="'+cy+'" r="'+dotR+'" fill="var(--line)" fill-opacity="0.7"/>';
+    const fontSize=Math.max(5, dotR*1.15);
+    nodesHtml+='<text id="tri-label-'+n+'" x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-size="'+fontSize+'" font-family="Inter, sans-serif" fill="var(--ink-soft)">'+n+'</text>';
+  }
+  document.getElementById('tri-nodes').innerHTML=nodesHtml;
+
+  let revealIndex=0;
+  function updateStats(current){
+    document.getElementById('tri-current-out').textContent=current;
+    document.getElementById('tri-count-out').textContent=revealIndex;
+    document.getElementById('tri-next-btn').disabled=revealIndex>=primesList.length;
+    document.getElementById('tri-next-btn').textContent=revealIndex>=primesList.length?'All primes revealed':'Next prime number →';
+  }
+  function revealNext(){
+    if(revealIndex>=primesList.length) return;
+    const p=primesList[revealIndex];
+    const el=document.getElementById('tri-node-'+p);
+    el.classList.add('prime','pulse');
+    setTimeout(()=>el.classList.remove('pulse'),600);
+    const lbl=document.getElementById('tri-label-'+p);
+    if(lbl) lbl.setAttribute('fill','#fff');
+    revealIndex++;
+    updateStats(p);
+  }
+  function revealAll(){
+    while(revealIndex<primesList.length){
+      const p=primesList[revealIndex];
+      document.getElementById('tri-node-'+p).classList.add('prime');
+      const lbl=document.getElementById('tri-label-'+p);
+      if(lbl) lbl.setAttribute('fill','#fff');
+      revealIndex++;
+    }
+    updateStats(primesList[primesList.length-1]);
+  }
+  function resetSpiral(){
+    for(let n=2;n<=MAX_N;n++){
+      document.getElementById('tri-node-'+n).classList.remove('prime','pulse');
+      const lbl=document.getElementById('tri-label-'+n);
+      if(lbl) lbl.setAttribute('fill','var(--ink-soft)');
+    }
+    revealIndex=0;
+    updateStats(1);
+  }
+  document.getElementById('tri-next-btn').addEventListener('click', revealNext);
+  document.getElementById('tri-all-btn').addEventListener('click', revealAll);
+  document.getElementById('tri-reset-btn').addEventListener('click', resetSpiral);
+  updateStats(1);
+
+  // Scala grande, con zoom e densità regolabile
+  const RING_STEPS=[58,129,182,288,408,577,913,1290];
+  const DEFAULT_STEP=5;
+
+  const canvas=document.getElementById('big-tri');
+  const ctx=canvas.getContext('2d');
+  const rootStyles=getComputedStyle(document.documentElement);
+  const goldColor=rootStyles.getPropertyValue('--gold').trim();
+  const tealColor=rootStyles.getPropertyValue('--teal').trim();
+
+  let bigPX, bigPY, baseScale, baseOffX, baseOffY;
+  const view={zoom:1, panX:0, panY:0};
+  const MIN_ZOOM=1, MAX_ZOOM=600;
+
+  function buildBigData(bigRing){
+    const bigN=1+3*bigRing*(bigRing+1);
+    const bigIsPrime=sieve(bigN);
+    let bMinX=0,bMaxX=0,bMinY=0,bMaxY=0;
+    DIRS.forEach(d=>{
+      const p=axialToPixel(d.q*bigRing, d.r*bigRing);
+      bMinX=Math.min(bMinX,p.x); bMaxX=Math.max(bMaxX,p.x);
+      bMinY=Math.min(bMinY,p.y); bMaxY=Math.max(bMaxY,p.y);
+    });
+    const bGridW=bMaxX-bMinX, bGridH=bMaxY-bMinY;
+    const primesX=[], primesY=[];
+    let n=1;
+    if(bigIsPrime[1]){ primesX.push(0); primesY.push(0); }
+    for(let radius=1; radius<=bigRing; radius++){
+      for(const hex of hexRing(radius)){
+        n++;
+        if(bigIsPrime[n]){
+          const p=axialToPixel(hex.q,hex.r);
+          primesX.push(p.x); primesY.push(p.y);
+        }
+      }
+    }
+    bigPX=Float64Array.from(primesX); bigPY=Float64Array.from(primesY);
+    baseScale=Math.min(canvas.width/bGridW, canvas.height/bGridH);
+    const baseExtraX=(canvas.width-bGridW*baseScale)/2, baseExtraY=(canvas.height-bGridH*baseScale)/2;
+    baseOffX=baseExtraX-bMinX*baseScale; baseOffY=baseExtraY-bMinY*baseScale;
+  }
+
+  function drawBig(){
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.save();
+    ctx.translate(view.panX, view.panY);
+    ctx.scale(view.zoom, view.zoom);
+    ctx.fillStyle=goldColor;
+    const dotSize=Math.max(baseScale*0.9,1);
+    for(let i=0;i<bigPX.length;i++){
+      ctx.fillRect(bigPX[i]*baseScale+baseOffX, bigPY[i]*baseScale+baseOffY, dotSize, dotSize);
+    }
+    ctx.strokeStyle=tealColor;
+    ctx.lineWidth=2/view.zoom;
+    ctx.setLineDash([5/view.zoom,4/view.zoom]);
+    ctx.beginPath();
+    DIRS.forEach((d,i)=>{
+      const p=axialToPixel(d.q*MAX_RING, d.r*MAX_RING);
+      const px=p.x*baseScale+baseOffX, py=p.y*baseScale+baseOffY;
+      if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    });
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function regenerateBig(stepIndex){
+    const bigRing=RING_STEPS[stepIndex];
+    const total=1+3*bigRing*(bigRing+1);
+    document.getElementById('tri-density-out').textContent=total.toLocaleString('en-US');
+    const statusEl=document.getElementById('tri-density-status');
+    statusEl.textContent='Generating…';
+    setTimeout(()=>{
+      buildBigData(bigRing);
+      view.zoom=1; view.panX=0; view.panY=0;
+      drawBig();
+      statusEl.textContent='';
+    }, 10);
+  }
+
+  document.getElementById('tri-density-slider').addEventListener('input', (e)=>{
+    const total=1+3*RING_STEPS[e.target.value]*(RING_STEPS[e.target.value]+1);
+    document.getElementById('tri-density-out').textContent=total.toLocaleString('en-US');
+  });
+  document.getElementById('tri-density-slider').addEventListener('change', (e)=>{
+    regenerateBig(parseInt(e.target.value));
+  });
+
+  canvas.addEventListener('wheel', (e)=>{
+    e.preventDefault();
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(canvas.width/rect.width);
+    const my=(e.clientY-rect.top)*(canvas.height/rect.height);
+    const factor=e.deltaY<0 ? 1.25 : 0.8;
+    const newZoom=Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, view.zoom*factor));
+    view.panX = mx - (newZoom/view.zoom)*(mx-view.panX);
+    view.panY = my - (newZoom/view.zoom)*(my-view.panY);
+    view.zoom=newZoom;
+    drawBig();
+  }, {passive:false});
+
+  let dragging=false, lastX=0, lastY=0;
+  canvas.addEventListener('mousedown', (e)=>{
+    dragging=true; lastX=e.clientX; lastY=e.clientY;
+    canvas.style.cursor='grabbing';
+  });
+  window.addEventListener('mousemove', (e)=>{
+    if(!dragging) return;
+    const rect=canvas.getBoundingClientRect();
+    const scaleFactor=canvas.width/rect.width;
+    view.panX += (e.clientX-lastX)*scaleFactor;
+    view.panY += (e.clientY-lastY)*scaleFactor;
+    lastX=e.clientX; lastY=e.clientY;
+    drawBig();
+  });
+  window.addEventListener('mouseup', ()=>{ if(dragging){ dragging=false; canvas.style.cursor='grab'; } });
+
+  function zoomBy(factor){
+    const cx=canvas.width/2, cy=canvas.height/2;
+    const newZoom=Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, view.zoom*factor));
+    view.panX = cx - (newZoom/view.zoom)*(cx-view.panX);
+    view.panY = cy - (newZoom/view.zoom)*(cy-view.panY);
+    view.zoom=newZoom;
+    drawBig();
+  }
+  function resetBigView(){ view.zoom=1; view.panX=0; view.panY=0; drawBig(); }
+
+  document.getElementById('tri-zoom-in').addEventListener('click', ()=>zoomBy(1.6));
+  document.getElementById('tri-zoom-out').addEventListener('click', ()=>zoomBy(0.625));
+  document.getElementById('tri-zoom-reset').addEventListener('click', resetBigView);
+
+  canvas.style.cursor='grab';
+  buildBigData(RING_STEPS[DEFAULT_STEP]);
+  drawBig();
+
+  // Diagramma esplicativo della mesh
+  (function drawConstructionDiagram(){
+    const DR=3;
+    const DN=1+3*DR*(DR+1);
+    const dPositions=generateSpiral(DR);
+    let dMinX=0,dMaxX=0,dMinY=0,dMaxY=0;
+    const dCoordMap=new Map();
+    for(let n=1;n<=DN;n++){
+      const p=axialToPixel(dPositions[n].q,dPositions[n].r);
+      dMinX=Math.min(dMinX,p.x);dMaxX=Math.max(dMaxX,p.x);
+      dMinY=Math.min(dMinY,p.y);dMaxY=Math.max(dMaxY,p.y);
+      dCoordMap.set(dPositions[n].q+','+dPositions[n].r,n);
+    }
+    const dGridW=dMaxX-dMinX, dGridH=dMaxY-dMinY;
+    const pad=24;
+    const dScale=Math.min((260-pad*2)/dGridW,(260-pad*2)/dGridH);
+    const dOffX=pad-dMinX*dScale, dOffY=pad-dMinY*dScale;
+    let lines='';
+    for(let n=1;n<=DN;n++){
+      const q=dPositions[n].q, r=dPositions[n].r;
+      const p1=axialToPixel(q,r);
+      [DIRS[0],DIRS[1],DIRS[2]].forEach(d=>{
+        const nn=dCoordMap.get((q+d.q)+','+(r+d.r));
+        if(nn){
+          const p2=axialToPixel(q+d.q,r+d.r);
+          lines+='<line x1="'+(p1.x*dScale+dOffX)+'" y1="'+(p1.y*dScale+dOffY)+'" x2="'+(p2.x*dScale+dOffX)+'" y2="'+(p2.y*dScale+dOffY)+'" stroke="var(--line)" stroke-width="1.5"/>';
+        }
+      });
+    }
+    let dots='';
+    for(let n=1;n<=DN;n++){
+      const p=axialToPixel(dPositions[n].q,dPositions[n].r);
+      dots+='<circle cx="'+(p.x*dScale+dOffX)+'" cy="'+(p.y*dScale+dOffY)+'" r="4.5" fill="var(--ink)"/>';
+    }
+    document.getElementById('tri-construction-diagram').innerHTML=lines+dots;
+  })();
+})();
+</script>
+
+</body>
+</html>
