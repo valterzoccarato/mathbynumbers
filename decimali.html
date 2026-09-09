@@ -21,6 +21,9 @@
   header .wide{display:flex;align-items:center;justify-content:space-between;}
   .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;text-decoration:none;color:inherit;}
   nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;}
+  .lang-switch{display:flex;gap:6px;align-items:center;}
+  .lang-switch a{padding:4px 8px;border-radius:5px;border:1px solid var(--line);font-size:13px;}
+  .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
 
   .placeholder{padding:100px 24px;text-align:center;max-width:600px;margin:0 auto;}
   .placeholder .icon{font-size:48px;color:var(--gold);font-family:'Source Serif 4',serif;margin-bottom:24px;}
@@ -38,8 +41,8 @@
 
 <header>
   <div class="wide">
-    <a class="logo" href="index.html">mathbynumbers</a>
-    <nav><a href="index.html">Home</a></nav>
+    <a class="logo" href="it.html">mathbynumbers</a>
+    <nav class="lang-switch"><a href="it.html">Home</a><a href="decimali.html" class="current">IT</a><a href="decimali_en.html">EN</a></nav>
   </div>
 </header>
 
@@ -52,7 +55,7 @@
     <span>√2 — radice di due</span>
     <span>e — numero di Eulero</span>
   </div>
-  <a class="back" href="index.html">← Torna alla home</a>
+  <a class="back" href="it.html">← Torna alla home</a>
 </div>
 
 <footer>

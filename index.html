@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>mathbynumbers — matematica da guardare</title>
+<title>mathbynumbers — math to look at</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,8 +19,11 @@
   .wide{max-width:1000px;margin:0 auto;padding:0 24px;}
 
   header{padding:28px 0;}
-  header .wide{display:flex;align-items:center;justify-content:center;}
-  .logo{font-family:'Source Serif 4',serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;}
+  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Source Serif 4',serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  .lang-switch{display:flex;gap:6px;align-items:center;}
+  .lang-switch a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:4px 8px;border-radius:5px;border:1px solid var(--line);}
+  .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
 
   .hero{padding:40px 0 56px;text-align:center;}
   .hero h1{font-size:40px;line-height:1.25;letter-spacing:-0.01em;}
@@ -80,58 +83,62 @@
 
 <header>
   <div class="wide">
-    <div class="logo">mathbynumbers</div>
+    <a class="logo" href="index.html">mathbynumbers</a>
+    <div class="lang-switch">
+      <a href="it.html">IT</a>
+      <a href="index.html" class="current">EN</a>
+    </div>
   </div>
 </header>
 
 <section class="hero">
   <div class="wide">
-    <h1>Matematica da guardare,<br>prima ancora che da leggere</h1>
-    <p>Esplorazioni interattive, pattern nascosti nei numeri, e qualche gioco per allenare l'occhio oltre che la mente.</p>
+    <h1>Math to look at,<br>before you even read it</h1>
+    <p>Interactive explorations, hidden patterns in numbers, and a few games to train the eye as much as the mind.</p>
   </div>
 </section>
 
 <div class="card-grid">
-  <a class="card c-gold" href="fibonacci.html">
+  <a class="card c-gold" href="fibonacci_en.html">
     <div>
       <div class="icon">φ</div>
       <h2>Fibonacci</h2>
-      <p>Come una semplice somma disegna una spirale, e perché la ritroviamo ovunque in natura.</p>
+      <p>How a simple sum draws a spiral, and why we find it everywhere in nature.</p>
     </div>
-    <div class="arrow">Esplora →</div>
+    <div class="arrow">Explore →</div>
   </a>
 
-  <a class="card c-teal" href="numeri-primi.html">
+  <a class="card c-teal" href="numeri-primi_en.html">
     <div>
       <div class="icon">✳</div>
-      <h2>Numeri primi</h2>
-      <p>Cosa succede quando disponi gli interi a spirale su una griglia quadrata o triangolare.</p>
+      <h2>Prime numbers</h2>
+      <p>What happens when you arrange integers in a spiral on a square or triangular grid.</p>
     </div>
-    <div class="arrow">Esplora →</div>
+    <div class="arrow">Explore →</div>
   </a>
 
-  <a class="card c-gold" href="decimali.html">
+  <a class="card c-gold" href="decimali_en.html">
     <div>
       <div class="icon">π</div>
-      <h2>Alla ricerca dei decimali</h2>
-      <p>Il calcolo di π, √2 e del numero di Eulero, cifra dopo cifra.</p>
+      <h2>The search for digits</h2>
+      <p>Computing π, √2, and Euler's number, one digit at a time.</p>
     </div>
-    <div class="arrow">Esplora →</div>
+    <div class="arrow">Explore →</div>
   </a>
 
-  <a class="card c-teal" href="gioco/index.html">
+  <a class="card c-teal" href="gioco/index.html" target="_blank" rel="noopener">
     <div>
       <div class="icon">▲</div>
-      <h2>Giochi</h2>
-      <p>Numeroids: distruggi gli asteroidi-numero e mettiti alla prova.</p>
+      <h2>Games</h2>
+      <p>Numeroids: blast the number-asteroids and put yourself to the test.</p>
     </div>
-    <div class="arrow">Gioca →</div>
+    <div class="arrow">Play →</div>
   </a>
 </div>
 
 <footer>
   <div class="wide">
-    <p>mathbynumbers — matematica da guardare, prima ancora che da leggere</p>
+    <p>mathbynumbers — math to look at, before you even read it</p>
   </div>
 </footer>
 

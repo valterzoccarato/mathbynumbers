@@ -23,6 +23,9 @@
   header .wide{display:flex;align-items:center;justify-content:space-between;}
   .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;}
   nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;margin-left:28px;}
+  .lang-switch{display:flex;gap:6px;}
+  .lang-switch a{margin-left:0 !important;padding:4px 8px;border-radius:5px;border:1px solid var(--line);font-size:13px;}
+  .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
   nav a:hover{color:var(--ink);}
 
   .hero{padding:64px 0 32px;}
@@ -99,8 +102,8 @@
 
 <header>
   <div class="wide">
-    <a class="logo" href="index.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
-    <nav><a href="#">Lezioni</a><a href="#">Esercizi</a><a href="#">Quiz</a></nav>
+    <a class="logo" href="it.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
+    <nav class="lang-switch"><a href="numeri-primi.html" class="current">IT</a><a href="numeri-primi_en.html">EN</a></nav>
   </div>
 </header>
 

@@ -112,6 +112,26 @@ button:active {
     display: none;
 }
 
+.back-link {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    text-decoration: none;
+    background: rgba(255,255,255,0.08);
+    padding: 8px 14px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    z-index: 20;
+    transition: background 0.2s;
+}
+
+.back-link:hover {
+    background: rgba(255,255,255,0.2);
+}
+
 #finalScore {
     color: #0f0;
     text-shadow: 0 0 10px #0f0;
