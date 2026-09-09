@@ -1,0 +1,22 @@
+{
+  "constants": [
+    {
+      "id": "pi",
+      "label": "Pi greco",
+      "symbol": "π",
+      "total_digits": 10000000
+    },
+    {
+      "id": "sqrt2",
+      "label": "Radice di due",
+      "symbol": "√2",
+      "total_digits": 10000000
+    },
+    {
+      "id": "phi",
+      "label": "Sezione aurea",
+      "symbol": "φ",
+      "total_digits": 10000000
+    }
+  ]
+}

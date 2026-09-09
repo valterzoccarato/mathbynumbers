@@ -1,0 +1,12 @@
+{
+  "constant": "sqrt2",
+  "label": "Radice di due",
+  "symbol": "\u221a2",
+  "total_digits": 10000000,
+  "chunk_size": 1000000,
+  "n_chunks": 10,
+  "generated_at": "2026-09-04T22:46:08.032198+00:00",
+  "packed_file": "packed.bin",
+  "packed_format": "nibble (2 cifre/byte, hi-nibble prima)",
+  "note": "le cifre sono SOLO la parte decimale, la parte intera e' esclusa"
+}
