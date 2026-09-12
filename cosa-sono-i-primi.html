@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosa sono i numeri primi — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3; --ink:#1C1B18; --ink-soft:#5B584F;
+    --gold:#B8923C; --gold-soft:#EFE4C8; --teal:#2C5F56; --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  header{padding:28px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  nav.lang-switch{display:flex;gap:6px;}
+  nav.lang-switch a{color:var(--ink-soft);text-decoration:none;font-size:13px;padding:4px 9px;border-radius:5px;border:1px solid var(--line);}
+  nav.lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:38px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:600px;margin-top:18px;}
+
+  section.body-section{padding:48px 0;}
+  section.body-section:not(:first-of-type){border-top:1px solid var(--line);}
+  section.body-section h2{font-size:26px;margin-bottom:18px;}
+  section.body-section h3{font-size:18px;font-family:'Inter',sans-serif;font-weight:600;margin:26px 0 8px;}
+  section.body-section p{font-size:16px;color:var(--ink-soft);max-width:66ch;}
+  section.body-section p + p{margin-top:14px;}
+  section.body-section.tinted{background:#fff;}
+
+  .example-row{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;}
+  .example-row .dot{
+    width:44px;height:44px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Source Serif 4',serif;font-size:17px;font-weight:600;
+  }
+  .dot.prime{background:var(--gold-soft);color:var(--gold);}
+  .dot.composite{background:var(--teal-soft);color:var(--teal);}
+
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:19px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px auto;max-width:66ch;}
+
+  .timeline{border-left:2px solid var(--line);margin:24px 0 0 6px;padding-left:24px;}
+  .timeline-item{position:relative;padding-bottom:26px;}
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-item::before{
+    content:"";position:absolute;left:-30px;top:4px;
+    width:10px;height:10px;border-radius:50%;background:var(--gold);
+  }
+  .timeline-item .year{font-family:'Source Serif 4',serif;font-size:15px;color:var(--teal);font-weight:600;}
+  .timeline-item p{margin-top:4px;}
+
+  .conj-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px;}
+  .conj-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 22px;}
+  .conj-card h3{margin-top:0;font-size:16px;}
+  .conj-card p{font-size:14px;margin-top:8px;}
+  .conj-card .status{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:var(--gold);margin-top:10px;font-weight:600;}
+
+  .cta-card{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--teal-soft);border-radius:12px;padding:28px 30px;margin-top:8px;
+  }
+  .cta-card h3{margin:0 0 6px;font-size:19px;}
+  .cta-card p{margin:0;font-size:14px;max-width:46ch;}
+  .cta-card a.btn{
+    flex-shrink:0;background:var(--teal);color:#fff;text-decoration:none;
+    padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;
+  }
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .hero h1{font-size:29px;}
+    .conj-grid{grid-template-columns:1fr;}
+    .cta-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="it.html">mathbynumbers</a>
+    <nav class="lang-switch">
+      <a href="cosa-sono-i-primi.html" class="current">IT</a>
+      <a href="cosa-sono-i-primi_en.html">EN</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>I mattoni con cui sono costruiti tutti i numeri</h1>
+    <p class="lead">Un numero primo è un intero maggiore di 1 che non si può ottenere moltiplicando tra loro due numeri più piccoli. Sembra una definizione modesta. In realtà, da questa semplice regola nascono alcuni dei problemi più difficili — e più belli — di tutta la matematica.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>Cosa rende un numero "primo"</h2>
+    <p>Prendi il numero 12: puoi disporre 12 pallini in una griglia rettangolare — 3 file da 4, oppure 2 file da 6. Prendi invece il numero 7: per quanto ci provi, non riesci a disporre 7 pallini in un rettangolo che non sia una singola riga. Questa è, in sostanza, l'idea di fondo: un numero primo è un numero che si rifiuta di formare rettangoli.</p>
+    <p>In termini più formali, i suoi unici divisori sono 1 e se stesso. I primi 10 numeri primi sono 2, 3, 5, 7, 11, 13, 17, 19, 23, 29. Tutti gli altri numeri interi maggiori di 1 — quelli che invece un rettangolo riescono a formarlo — si chiamano numeri composti.</p>
+
+    <div class="example-row">
+      <div class="dot composite">4</div>
+      <div class="dot prime">5</div>
+      <div class="dot composite">6</div>
+      <div class="dot prime">7</div>
+      <div class="dot composite">8</div>
+      <div class="dot composite">9</div>
+      <div class="dot composite">10</div>
+      <div class="dot prime">11</div>
+      <div class="dot composite">12</div>
+      <div class="dot prime">13</div>
+    </div>
+
+    <h3>Perché 1 non è considerato primo</h3>
+    <p>Qui la storia è più complicata di quanto sembri. Per secoli i matematici non furono affatto d'accordo: nell'Ottocento diversi testi e tavole di numeri primi includevano tranquillamente l'1 nell'elenco. Il motivo per cui oggi lo escludiamo non è arbitrario, ma pratico: se 1 fosse primo, il teorema fondamentale dell'aritmetica (quello secondo cui ogni numero si scompone in fattori primi in un unico modo) smetterebbe di essere vero, perché potresti sempre aggiungere altri "1" alla scomposizione senza cambiarne il valore. Escludere l'1 è la scelta che tiene in piedi tutto il resto dell'edificio.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <h2>Una caccia che dura da 2300 anni</h2>
+    <p class="wrap" style="max-width:66ch;padding:0;">I numeri primi affascinano i matematici da ben prima che esistesse la matematica come la intendiamo oggi. Ecco alcune tappe di questa storia lunghissima.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">Circa 300 a.C.</div>
+        <p>Euclide, nei suoi <em>Elementi</em>, dimostra che i numeri primi non finiscono mai — una delle prime dimostrazioni per assurdo della storia della matematica, ed è così elegante che si usa ancora oggi, praticamente identica.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Circa 240 a.C.</div>
+        <p>Eratostene di Cirene inventa un metodo meccanico per trovare tutti i numeri primi fino a un certo limite: scrivi tutti i numeri, cancelli i multipli di 2, poi i multipli di 3, poi di 5, e così via. Quello che resta sono i primi. Duemila anni dopo, i computer usano ancora sostanzialmente lo stesso trucco.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1600 circa</div>
+        <p>Pierre de Fermat e Marin Mersenne studiano forme particolari di numeri primi — i primi di Mersenne (2 elevato a p, meno 1) restano ancora oggi il modo più efficiente per trovare numeri primi enormi.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1859</div>
+        <p>Bernhard Riemann collega i numeri primi a una funzione dell'analisi complessa, la funzione zeta. La sua congettura su dove si annulla questa funzione — l'ipotesi di Riemann — resta uno dei problemi aperti più importanti dell'intera matematica.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1970</div>
+        <p>Quello che sembrava un ramo della matematica pura senza applicazioni pratiche diventa, all'improvviso, la base della crittografia moderna: nasce la crittografia a chiave pubblica.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2024</div>
+        <p>Il più grande numero primo conosciuto oggi ha oltre 41 milioni di cifre — se lo stampassi in un libro con caratteri normali, occuperebbe più di 10.000 pagine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>La dimostrazione che non finiscono mai</h2>
+    <p>L'argomento di Euclide è talmente semplice ed elegante che vale la pena vederlo per intero. Supponiamo, per assurdo, che i numeri primi siano in numero finito. Potremmo allora elencarli tutti: p₁, p₂, ..., pₙ.</p>
+    <p>Costruiamo ora un nuovo numero moltiplicandoli tutti insieme e aggiungendo 1:</p>
+    <div class="formula">N = (p₁ · p₂ · ... · pₙ) + 1</div>
+    <p>Questo numero N, diviso per uno qualsiasi dei primi della nostra lista, dà sempre resto 1 — non è mai divisibile esattamente per nessuno di essi. Ma ogni numero maggiore di 1 deve avere almeno un fattore primo. Quindi N ha un fattore primo che, per costruzione, non può essere nella nostra lista originale. Contraddizione: la lista non poteva essere completa. Per quanto grande fosse la lista di partenza, ne esiste sempre uno in più.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <h2>Domande a cui nessuno sa ancora rispondere</h2>
+    <p class="wrap" style="max-width:66ch;padding:0;">Nonostante 2300 anni di studio, alcune domande sui numeri primi — facilissime da formulare — restano senza risposta.</p>
+
+    <div class="conj-grid">
+      <div class="conj-card">
+        <h3>Congettura di Goldbach</h3>
+        <p>Ogni numero pari maggiore di 2 può essere scritto come somma di due numeri primi (es. 28 = 5 + 23). Verificata al computer per numeri enormi, mai dimostrata in generale.</p>
+        <span class="status">Aperta dal 1742</span>
+      </div>
+      <div class="conj-card">
+        <h3>Primi gemelli</h3>
+        <p>Esistono infinite coppie di numeri primi che differiscono di 2 (come 11 e 13, o 29 e 31)? Sembra ovvio che sì, guardando quanto sono comuni tra i numeri piccoli. Nessuno lo ha ancora dimostrato.</p>
+        <span class="status">Aperta</span>
+      </div>
+      <div class="conj-card">
+        <h3>Ipotesi di Riemann</h3>
+        <p>Determina con precisione quanto "irregolarmente" sono distribuiti i numeri primi. È uno dei sette Problemi del Millennio: risolverla vale un milione di dollari.</p>
+        <span class="status">Aperta dal 1859</span>
+      </div>
+      <div class="conj-card">
+        <h3>Nessuna formula</h3>
+        <p>Non esiste alcuna formula algebrica semplice che generi solo numeri primi. Alcune formule si avvicinano (come n² + n + 41 di Eulero), ma prima o poi falliscono sempre.</p>
+        <span class="status">Dimostrato impossibile</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>A cosa servono, fuori dai libri di matematica</h2>
+    <p>Per quasi duemila anni i numeri primi furono lo studio per eccellenza della matematica "inutile" — bella, profonda, ma senza alcuna applicazione pratica. Poi, negli anni '70, tutto cambiò.</p>
+    <p>La crittografia a chiave pubblica — quella che protegge ogni acquisto online, ogni messaggio cifrato, ogni connessione sicura — si basa su un fatto sorprendentemente semplice: moltiplicare due numeri primi enormi è velocissimo anche per un computer modesto, ma fare il percorso inverso (scomporre il risultato nei suoi due fattori primi originali) è così lento da risultare, nella pratica, impossibile anche per i supercomputer più potenti, se i numeri sono scelti abbastanza grandi.</p>
+    <p>I numeri primi compaiono anche in luoghi più inaspettati: nelle tabelle hash che rendono veloci i database, nei codici di controllo che verificano un ISBN o un numero di carta di credito, e persino in biologia — alcune specie di cicale emergono dal terreno solo ogni 13 o 17 anni, intervalli primi che sembrano essersi evoluti apposta per rendere più difficile la sincronizzazione con i predatori.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wrap">
+    <div class="cta-card">
+      <div>
+        <h3>Vedili in azione</h3>
+        <p>Abbiamo costruito due esplorazioni interattive per vedere come si comportano i numeri primi quando li disponi su una griglia quadrata o triangolare — con pattern che nessuno sa ancora spiegare del tutto.</p>
+      </div>
+      <a class="btn" href="numeri-primi.html">Esplora la spirale →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — matematica da guardare, prima ancora che da leggere</p>
+  </div>
+</footer>
+
+</body>
+</html>

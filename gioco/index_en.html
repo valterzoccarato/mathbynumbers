@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,42 +8,42 @@
 </head>
 <body>
     <div class="top-bar">
-        <a href="../it.html" class="back-link">← Torna al sito</a>
+        <a href="../index.html" class="back-link">← Back to site</a>
         <div class="lang-switch">
-            <a href="index.html" class="current">IT</a>
-            <a href="index_en.html">EN</a>
+            <a href="index.html">IT</a>
+            <a href="index_en.html" class="current">EN</a>
         </div>
     </div>
     <div class="game-container">
         <div class="hud">
-            <div class="score">Punteggio: <span id="score">0</span></div>
-            <div class="lives">Vite: <span id="lives">3</span></div>
-            <div class="ammo">Colpi: <span id="ammo">40</span></div>
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="lives">Lives: <span id="lives">3</span></div>
+            <div class="ammo">Ammo: <span id="ammo">40</span></div>
         </div>
         <canvas id="gameCanvas"></canvas>
         <div id="gameOver" class="game-over hidden">
             <h2>GAME OVER</h2>
-            <p>Punteggio finale: <span id="finalScore">0</span></p>
+            <p>Final score: <span id="finalScore">0</span></p>
 
             <div id="newRecordForm" class="new-record hidden">
-                <p class="new-record-label">Nuovo record! Inserisci le tue iniziali:</p>
+                <p class="new-record-label">New high score! Enter your initials:</p>
                 <input id="initialsInput" class="initials-input" maxlength="3" placeholder="AAA" autocomplete="off">
-                <button id="saveRecordBtn">Salva</button>
+                <button id="saveRecordBtn">Save</button>
             </div>
 
             <div id="highscoreListGameOver" class="highscores"></div>
 
-            <button id="restartBtn">Rigioca</button>
+            <button id="restartBtn">Play again</button>
         </div>
         <div id="startScreen" class="start-screen">
             <h1>NUMEROIDS</h1>
-            <p>Usa le frecce per muoverti</p>
-            <p>Premi SPAZIO per sparare</p>
-            <p>Colpisci un numero: si dividerà in altrettanti asteroidi più piccoli</p>
-            <button id="startBtn">Inizia</button>
+            <p>Use the arrow keys to move</p>
+            <p>Press SPACE to shoot</p>
+            <p>Hit a number: it splits into that many smaller asteroids</p>
+            <button id="startBtn">Start</button>
 
             <div class="highscores-panel">
-                <h3>Record</h3>
+                <h3>High scores</h3>
                 <div id="highscoreListStart" class="highscores"></div>
             </div>
         </div>

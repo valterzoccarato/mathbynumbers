@@ -425,6 +425,17 @@ function gameOver() {
     gameRunning = false;
     document.getElementById('finalScore').textContent = score;
     document.getElementById('gameOver').classList.remove('hidden');
+
+    const recordForm = document.getElementById('newRecordForm');
+    if (isHighScore(score)) {
+        recordForm.classList.remove('hidden');
+        document.getElementById('initialsInput').value = '';
+        renderHighScores('highscoreListGameOver'); // mostra la classifica attuale, prima del salvataggio
+        setTimeout(() => document.getElementById('initialsInput').focus(), 50);
+    } else {
+        recordForm.classList.add('hidden');
+        renderHighScores('highscoreListGameOver');
+    }
 }
 
 // Inizia gioco
@@ -476,6 +487,66 @@ function gameLoop() {
 
     requestAnimationFrame(gameLoop);
 }
+
+// ---------- Classifica (record) ----------
+const HS_KEY = 'numeroids_highscores';
+const MAX_SCORES = 6;
+
+function getHighScores() {
+    try {
+        const data = JSON.parse(localStorage.getItem(HS_KEY));
+        return Array.isArray(data) ? data : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function isHighScore(s) {
+    const scores = getHighScores();
+    if (scores.length < MAX_SCORES) return s > 0;
+    return s > scores[scores.length - 1].score;
+}
+
+function saveHighScore(initials, s) {
+    const clean = (initials || '').toUpperCase().replace(/[^A-Z]/g, '').padEnd(3, 'A').slice(0, 3);
+    const scores = getHighScores();
+    scores.push({ initials: clean, score: s });
+    scores.sort((a, b) => b.score - a.score);
+    scores.splice(MAX_SCORES);
+    localStorage.setItem(HS_KEY, JSON.stringify(scores));
+}
+
+function renderHighScores(elementId) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    const scores = getHighScores();
+    el.innerHTML = '';
+    for (let i = 0; i < MAX_SCORES; i++) {
+        const entry = scores[i];
+        const li = document.createElement('li');
+        li.innerHTML =
+            '<span class="rank">' + (i + 1) + '</span>' +
+            '<span class="initials">' + (entry ? entry.initials : '---') + '</span>' +
+            '<span class="points">' + (entry ? entry.score : '-') + '</span>';
+        el.appendChild(li);
+    }
+}
+
+renderHighScores('highscoreListStart');
+
+document.getElementById('initialsInput').addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
+});
+document.getElementById('initialsInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('saveRecordBtn').click();
+});
+document.getElementById('saveRecordBtn').addEventListener('click', () => {
+    const initials = document.getElementById('initialsInput').value;
+    saveHighScore(initials, score);
+    document.getElementById('newRecordForm').classList.add('hidden');
+    renderHighScores('highscoreListGameOver');
+    renderHighScores('highscoreListStart');
+});
 
 // Event listeners
 document.getElementById('startBtn').addEventListener('click', startGame);
