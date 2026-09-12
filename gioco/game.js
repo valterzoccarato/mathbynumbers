@@ -489,10 +489,24 @@ function gameLoop() {
 }
 
 // ---------- Classifica (record) ----------
+// Se HIGHSCORE_API è vuoto, si usa solo la classifica locale (localStorage).
+// Quando avrai configurato il Cloudflare Worker, incolla qui il suo URL:
+// es. const HIGHSCORE_API = 'https://numeroids-scores.tuonome.workers.dev';
+const HIGHSCORE_API = '';
+const API_TIMEOUT_MS = 3000;
+
 const HS_KEY = 'numeroids_highscores';
 const MAX_SCORES = 6;
+let lastKnownScores = []; // usata per decidere se un punteggio è da classifica, prima che serva davvero
 
-function getHighScores() {
+function fetchWithTimeout(url, options, ms) {
+    return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+    ]);
+}
+
+function getLocalHighScores() {
     try {
         const data = JSON.parse(localStorage.getItem(HS_KEY));
         return Array.isArray(data) ? data : [];
@@ -501,28 +515,67 @@ function getHighScores() {
     }
 }
 
-function isHighScore(s) {
-    const scores = getHighScores();
-    if (scores.length < MAX_SCORES) return s > 0;
-    return s > scores[scores.length - 1].score;
-}
-
-function saveHighScore(initials, s) {
-    const clean = (initials || '').toUpperCase().replace(/[^A-Z]/g, '').padEnd(3, 'A').slice(0, 3);
-    const scores = getHighScores();
-    scores.push({ initials: clean, score: s });
+function saveLocalHighScore(entry) {
+    const scores = getLocalHighScores();
+    scores.push(entry);
     scores.sort((a, b) => b.score - a.score);
     scores.splice(MAX_SCORES);
     localStorage.setItem(HS_KEY, JSON.stringify(scores));
+    return scores;
+}
+
+// Recupera la classifica: prova online, altrimenti usa quella locale
+async function loadHighScores() {
+    if (HIGHSCORE_API) {
+        try {
+            const res = await fetchWithTimeout(HIGHSCORE_API, {}, API_TIMEOUT_MS);
+            if (res.ok) {
+                lastKnownScores = await res.json();
+                return lastKnownScores;
+            }
+        } catch (e) {
+            // offline, o Worker non raggiungibile: si passa silenziosamente al locale
+        }
+    }
+    lastKnownScores = getLocalHighScores();
+    return lastKnownScores;
+}
+
+function isHighScore(s) {
+    if (lastKnownScores.length < MAX_SCORES) return s > 0;
+    return s > lastKnownScores[lastKnownScores.length - 1].score;
+}
+
+// Salva un punteggio: prova online, altrimenti (o in aggiunta) salva in locale
+async function submitHighScore(initials, s) {
+    const clean = (initials || '').toUpperCase().replace(/[^A-Z]/g, '').padEnd(3, 'A').slice(0, 3);
+    const entry = { initials: clean, score: s };
+
+    if (HIGHSCORE_API) {
+        try {
+            const res = await fetchWithTimeout(HIGHSCORE_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(entry)
+            }, API_TIMEOUT_MS);
+            if (res.ok) {
+                lastKnownScores = await res.json();
+                return lastKnownScores;
+            }
+        } catch (e) {
+            // offline: salviamo comunque in locale, cosi' il punteggio non si perde
+        }
+    }
+    lastKnownScores = saveLocalHighScore(entry);
+    return lastKnownScores;
 }
 
 function renderHighScores(elementId) {
     const el = document.getElementById(elementId);
     if (!el) return;
-    const scores = getHighScores();
     el.innerHTML = '';
     for (let i = 0; i < MAX_SCORES; i++) {
-        const entry = scores[i];
+        const entry = lastKnownScores[i];
         const li = document.createElement('li');
         li.innerHTML =
             '<span class="rank">' + (i + 1) + '</span>' +
@@ -532,7 +585,7 @@ function renderHighScores(elementId) {
     }
 }
 
-renderHighScores('highscoreListStart');
+loadHighScores().then(() => renderHighScores('highscoreListStart'));
 
 document.getElementById('initialsInput').addEventListener('input', (e) => {
     e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
@@ -540,10 +593,12 @@ document.getElementById('initialsInput').addEventListener('input', (e) => {
 document.getElementById('initialsInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') document.getElementById('saveRecordBtn').click();
 });
-document.getElementById('saveRecordBtn').addEventListener('click', () => {
+document.getElementById('saveRecordBtn').addEventListener('click', async () => {
     const initials = document.getElementById('initialsInput').value;
-    saveHighScore(initials, score);
+    document.getElementById('saveRecordBtn').disabled = true;
+    await submitHighScore(initials, score);
     document.getElementById('newRecordForm').classList.add('hidden');
+    document.getElementById('saveRecordBtn').disabled = false;
     renderHighScores('highscoreListGameOver');
     renderHighScores('highscoreListStart');
 });
