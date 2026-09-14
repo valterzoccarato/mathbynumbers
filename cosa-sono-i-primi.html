@@ -25,6 +25,10 @@
   nav.lang-switch{display:flex;gap:6px;}
   nav.lang-switch a{color:var(--ink-soft);text-decoration:none;font-size:13px;padding:4px 9px;border-radius:5px;border:1px solid var(--line);}
   nav.lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
 
   .hero{padding:64px 0 40px;}
   .hero h1{font-size:38px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
@@ -91,6 +95,11 @@
 <header>
   <div class="wide">
     <a class="logo" href="it.html">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria.html" class="active">Teoria</a>
+      <a href="interazioni.html">Interazioni</a>
+      <a href="giochi.html">Giochi</a>
+    </nav>
     <nav class="lang-switch">
       <a href="cosa-sono-i-primi.html" class="current">IT</a>
       <a href="cosa-sono-i-primi_en.html">EN</a>

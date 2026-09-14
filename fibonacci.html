@@ -38,6 +38,10 @@
   header .wide{display:flex;align-items:center;justify-content:space-between;}
   .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;}
   nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;margin-left:28px;}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;margin-left:0;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
   .lang-switch{display:flex;gap:6px;}
   .lang-switch a{margin-left:0 !important;padding:4px 8px;border-radius:5px;border:1px solid var(--line);font-size:13px;}
   .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
@@ -93,6 +97,11 @@
 <header>
   <div class="wide">
     <a class="logo" href="it.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria.html">Teoria</a>
+      <a href="interazioni.html" class="active">Interazioni</a>
+      <a href="giochi.html">Giochi</a>
+    </nav>
     <nav class="lang-switch"><a href="fibonacci.html" class="current">IT</a><a href="fibonacci_en.html">EN</a></nav>
   </div>
 </header>

@@ -18,24 +18,33 @@
   h1,h2{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
   .wide{max-width:1000px;margin:0 auto;padding:0 24px;}
 
-  header{padding:28px 0;}
-  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  header{padding:24px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
   .logo{font-family:'Source Serif 4',serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
   .lang-switch{display:flex;gap:6px;align-items:center;}
   .lang-switch a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:4px 8px;border-radius:5px;border:1px solid var(--line);}
   .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
 
-  .hero{padding:40px 0 56px;text-align:center;}
+  .hero{padding:52px 0 48px;text-align:center;}
   .hero h1{font-size:40px;line-height:1.25;letter-spacing:-0.01em;}
   .hero p{font-size:17px;color:var(--ink-soft);max-width:520px;margin:16px auto 0;}
+
+  .section-label{
+    max-width:1000px;margin:0 auto;padding:0 24px;
+    font-size:13px;text-transform:uppercase;letter-spacing:0.06em;
+    color:var(--gold);font-weight:600;margin-bottom:18px;
+  }
 
   .card-grid{
     display:grid;
     grid-template-columns:repeat(2, minmax(0,1fr));
     gap:24px;
-    max-width:760px;
+    max-width:1000px;
     margin:0 auto;
-    padding:0 24px 80px;
+    padding:0 24px 90px;
   }
   .card{
     display:block;
@@ -76,6 +85,7 @@
   @media (max-width:600px){
     .card-grid{grid-template-columns:1fr;}
     .hero h1{font-size:30px;}
+    header .wide{justify-content:center;text-align:center;}
   }
 </style>
 </head>
@@ -84,6 +94,11 @@
 <header>
   <div class="wide">
     <a class="logo" href="it.html">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria.html">Teoria</a>
+      <a href="interazioni.html">Interazioni</a>
+      <a href="giochi.html">Giochi</a>
+    </nav>
     <div class="lang-switch">
       <a href="it.html" class="current">IT</a>
       <a href="index.html">EN</a>
@@ -98,6 +113,7 @@
   </div>
 </section>
 
+<div class="section-label">Ultime novità</div>
 <div class="card-grid">
   <a class="card c-gold" href="fibonacci.html">
     <div>
@@ -129,8 +145,8 @@
   <a class="card c-teal" href="gioco/index.html" target="_blank" rel="noopener">
     <div>
       <div class="icon">▲</div>
-      <h2>Giochi</h2>
-      <p>Numeroids: distruggi gli asteroidi-numero e mettiti alla prova.</p>
+      <h2>Numeroids</h2>
+      <p>Distruggi gli asteroidi-numero e scala la classifica.</p>
     </div>
     <div class="arrow">Gioca →</div>
   </a>

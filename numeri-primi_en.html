@@ -26,6 +26,10 @@
   .lang-switch{display:flex;gap:6px;}
   .lang-switch a{margin-left:0 !important;padding:4px 8px;border-radius:5px;border:1px solid var(--line);font-size:13px;}
   .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
   nav a:hover{color:var(--ink);}
 
   .hero{padding:64px 0 32px;}
@@ -103,6 +107,11 @@
 <header>
   <div class="wide">
     <a class="logo" href="index.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria_en.html">Theory</a>
+      <a href="interazioni_en.html" class="active">Interactive</a>
+      <a href="giochi_en.html">Games</a>
+    </nav>
     <nav class="lang-switch"><a href="numeri-primi.html">IT</a><a href="numeri-primi_en.html" class="current">EN</a></nav>
   </div>
 </header>
