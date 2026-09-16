@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fattoroids</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <a href="../it.html" class="back-link">← Torna al sito</a>
+        <div class="lang-switch">
+            <a href="index.html" class="current">IT</a>
+        </div>
+    </div>
+    <div class="game-container">
+        <div class="hud">
+            <div class="score">Punteggio: <span id="score">0</span></div>
+            <div class="lives">Vite: <span id="lives">3</span></div>
+            <div class="powerup" id="powerupHud"></div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="gameOver" class="game-over hidden">
+            <h2>GAME OVER</h2>
+            <p>Punteggio finale: <span id="finalScore">0</span></p>
+
+            <div id="newRecordForm" class="new-record hidden">
+                <p class="new-record-label">Nuovo record! Inserisci le tue iniziali:</p>
+                <input id="initialsInput" class="initials-input" maxlength="3" placeholder="AAA" autocomplete="off">
+                <button id="saveRecordBtn">Salva</button>
+            </div>
+
+            <div id="highscoreListGameOver" class="highscores"></div>
+
+            <button id="restartBtn">Rigioca</button>
+        </div>
+        <div id="startScreen" class="start-screen">
+            <h1>FATTOROIDS</h1>
+            <p>Muovi il paddle con le frecce, lancia la palla con SPAZIO</p>
+            <p>Ogni mattone è un numero: colpiscilo e si scompone nei suoi due fattori</p>
+            <p class="legend">
+                <span class="dot normal"></span> numero normale
+                <span class="dot prime"></span> primo (serve la pallina speciale)
+                <span class="dot power"></span> potenza di un primo
+                <span class="dot multiple3"></span> multiplo di 3
+            </p>
+            <button id="startBtn">Inizia</button>
+
+            <div class="highscores-panel">
+                <h3>Record</h3>
+                <div id="highscoreListStart" class="highscores"></div>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
