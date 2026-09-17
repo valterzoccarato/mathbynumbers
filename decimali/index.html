@@ -19,6 +19,13 @@
   .site-nav .back{margin-right:16px;}
   .site-nav .main-nav{display:flex;gap:22px;}
   .site-nav .main-nav a.active{color:#e8ecf4;}
+  .theory-callout{
+    font-size:14px;color:#9aa4b8;background:rgba(124,158,255,0.08);
+    border:1px solid rgba(124,158,255,0.25);border-radius:8px;
+    padding:10px 16px;display:inline-block;margin-top:4px;
+  }
+  .theory-callout a{color:#7c9eff;text-decoration:none;font-weight:600;}
+  .theory-callout a:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -41,6 +48,10 @@
 <header>
   <h1><span class="pi" id="header-symbol">π</span> Explorer</h1>
   <p>Milioni di cifre decimali di costanti matematiche, precalcolate e ricercabili.</p>
+  <p class="theory-callout">
+    Vuoi sapere come si calcolano queste cifre, sia a mano che al computer?
+    <a href="../come-si-calcolano-i-decimali.html">Scoprilo qui →</a>
+  </p>
   <div class="header-controls">
     <div class="constant-tabs" id="constant-tabs"></div>
     <button id="view-toggle-btn" class="view-toggle">Vista congiunta</button>

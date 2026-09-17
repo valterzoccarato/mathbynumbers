@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Come si calcolano i decimali — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3; --ink:#1C1B18; --ink-soft:#5B584F;
+    --gold:#B8923C; --gold-soft:#EFE4C8; --teal:#2C5F56; --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  header{padding:24px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
+  .lang-switch{display:flex;gap:6px;align-items:center;}
+  .lang-switch a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:4px 8px;border-radius:5px;border:1px solid var(--line);}
+  .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:38px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:620px;margin-top:18px;}
+
+  section.body-section{padding:48px 0;}
+  section.body-section:not(:first-of-type){border-top:1px solid var(--line);}
+  section.body-section h2{font-size:26px;margin-bottom:18px;}
+  section.body-section h3{font-size:18px;font-family:'Inter',sans-serif;font-weight:600;margin:26px 0 8px;}
+  section.body-section p{font-size:16px;color:var(--ink-soft);max-width:68ch;}
+  section.body-section p + p{margin-top:14px;}
+  section.body-section.tinted{background:#fff;}
+
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:19px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px auto;max-width:68ch;}
+  section.body-section.tinted .formula{background:var(--cream);}
+
+  .method-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:20px;}
+  .method-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px 20px;}
+  .method-card h3{margin-top:0;font-size:16px;}
+  .method-card .symbol{font-family:'Source Serif 4',serif;font-size:28px;color:var(--gold);margin-bottom:10px;}
+  .method-card p{font-size:14px;margin-top:8px;}
+
+  .timeline{border-left:2px solid var(--line);margin:24px 0 0 6px;padding-left:24px;}
+  .timeline-item{position:relative;padding-bottom:26px;}
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-item::before{
+    content:"";position:absolute;left:-30px;top:4px;
+    width:10px;height:10px;border-radius:50%;background:var(--gold);
+  }
+  .timeline-item .year{font-family:'Source Serif 4',serif;font-size:15px;color:var(--teal);font-weight:600;}
+  .timeline-item p{margin-top:4px;}
+
+  .note-card{
+    background:var(--teal-soft);border-radius:10px;padding:20px 22px;margin-top:20px;
+    font-size:14px;color:var(--ink);
+  }
+  .note-card strong{color:var(--teal);}
+
+  .cta-card{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--teal-soft);border-radius:12px;padding:28px 30px;margin-top:8px;
+  }
+  .cta-card h3{margin:0 0 6px;font-size:19px;}
+  .cta-card p{margin:0;font-size:14px;max-width:46ch;}
+  .cta-card a.btn{
+    flex-shrink:0;background:var(--teal);color:#fff;text-decoration:none;
+    padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;
+  }
+
+  .coming-soon{font-size:13px;color:var(--ink-soft);font-style:italic;margin-top:10px;}
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .hero h1{font-size:29px;}
+    .method-grid{grid-template-columns:1fr;}
+    .cta-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="it.html">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria.html" class="active">Teoria</a>
+      <a href="interazioni.html">Interazioni</a>
+      <a href="giochi.html">Giochi</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="come-si-calcolano-i-decimali.html" class="current">IT</a>
+      <a href="come-si-calcolano-i-decimali_en.html">EN</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Come si fa, in pratica, a calcolare un milione di cifre</h1>
+    <p class="lead">π, √2 e il numero aureo hanno tutti infinite cifre decimali che non si ripetono mai. Prima di chiederci cosa significhino — la storia, le curiosità, tutto il resto — vale la pena capire come si fa, concretamente, a tirarle fuori: a mano, con la logica di secoli fa, e con un computer, con la logica di oggi.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>A mano, con carta e penna</h2>
+    <p>Molto prima dei computer, i matematici avevano già metodi solidi per spingersi a decine o centinaia di cifre — lenti, faticosi, ma corretti.</p>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="symbol">π</div>
+        <h3>Il metodo di Archimede</h3>
+        <p>Intorno al 250 a.C., Archimede intrappolò π tra due poligoni regolari — uno inscritto e uno circoscritto a un cerchio. Più lati aggiungeva (partì da 6, arrivò a 96), più i due poligoni si stringevano attorno al valore vero. Con carta e penna, arrivò a dimostrare che π sta tra 3,1408 e 3,1429.</p>
+      </div>
+      <div class="method-card">
+        <div class="symbol">√2</div>
+        <h3>Il metodo babilonese</h3>
+        <p>Si parte da una stima qualsiasi, e la si migliora ripetendo una semplice media: se la tua stima è troppo alta, dividerla per il numero che vuoi trovare la radice dà un valore troppo basso — la media dei due è già più vicina alla verità di entrambi. Si ripete, e ogni volta il numero di cifre corrette raddoppia quasi.</p>
+      </div>
+      <div class="method-card">
+        <div class="symbol">φ</div>
+        <h3>Dai rapporti di Fibonacci</h3>
+        <p>Dividendo due numeri di Fibonacci consecutivi sempre più grandi (8/5, 13/8, 21/13...) il risultato si avvicina sempre di più al numero aureo. È lento, ma richiede solo divisioni — nessuna radice quadrata, nessuna formula complicata.</p>
+      </div>
+    </div>
+
+    <div class="note-card">
+      <strong>Un record umano</strong>: nel 1873 William Shanks calcolò a mano 707 cifre di π — un lavoro durato anni. Solo nel 1946 ci si accorse che aveva sbagliato un calcolo, e tutte le cifre dalla 528esima in poi erano errate. Nessuno se ne era accorto per quasi un secolo.
+    </div>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <h2>Con un computer</h2>
+    <p class="wrap" style="max-width:68ch;padding:0;">Il principio di fondo non cambia molto — si tratta sempre di ripetere un calcolo che si avvicina sempre di più al valore vero. Quello che cambia è la velocità con cui ci si avvicina, e quanto lontano si può arrivare prima che l'errore di arrotondamento diventi un problema.</p>
+
+    <h3>Il metodo di Newton, sul serio</h3>
+    <p>Il trucco babilonese per la radice quadrata è in realtà un caso particolare di un'idea molto più generale, il metodo di Newton: parti da una stima, e ad ogni passo la correggi usando quanto "sbagli" nella direzione giusta. Applicato con l'aritmetica a precisione arbitraria di un computer (numeri che possono avere milioni di cifre, non solo le 15-17 che un computer gestisce normalmente), il metodo di Newton per la radice quadrata è <em>quadraticamente convergente</em>: il numero di cifre corrette raddoppia a ogni singolo passo.</p>
+    <div class="formula">x<sub>n+1</sub> = ½ ( x<sub>n</sub> + N / x<sub>n</sub> )</div>
+    <p>Con questa formula, per arrivare a un milione di cifre corrette di √2 servono appena una ventina di passaggi — il resto è tutta questione di quanto velocemente il computer riesce a moltiplicare numeri enormi tra loro, che è in realtà il vero collo di bottiglia in questi calcoli.</p>
+
+    <h3>Formule che "mangiano" cifre a ogni passo</h3>
+    <p>Per π, i record mondiali di oggi non usano poligoni: usano formule scoperte nel Novecento che convergono molto più rapidamente. La più famosa è la formula di Chudnovsky (1988), una serie in cui <strong>ogni singolo termine aggiunge circa 14 nuove cifre corrette</strong>:</p>
+    <div class="formula">1/π = 12 · Σ [ (−1)ᵏ (6k)! (13591409 + 545140134k) ] / [ (3k)! (k!)³ 640320^(3k+3/2) ]</div>
+    <p>Per il numero aureo, il calcolo è quasi un sottoprodotto: φ = (1 + √5) / 2, quindi basta applicare a √5 lo stesso metodo di Newton usato per √2 qui sopra, e poi una somma e una divisione per 2.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>Come li abbiamo calcolati per questo sito</h2>
+    <p>Le cifre che puoi cercare ed esplorare nella sezione "Alla ricerca dei decimali" — dieci milioni per ciascuna delle tre costanti — sono state generate seguendo esattamente questi principi: aritmetica a precisione arbitraria e metodi a convergenza rapida, non i milleseicento poligoni di Archimede.</p>
+    <p>In pratica, √2 e φ sono stati calcolati con il metodo di Newton descritto sopra, spinto fino alla precisione necessaria; π con un algoritmo a convergenza rapida della stessa famiglia della formula di Chudnovsky. Il lavoro pesante — le moltiplicazioni tra numeri con milioni di cifre — è stato delegato a librerie di calcolo numerico pensate apposta per l'aritmetica a precisione arbitraria, che fanno esattamente questo tipo di conti per mestiere.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <div class="cta-card">
+      <div>
+        <h3>Prova tu stesso a cercare un pattern</h3>
+        <p>Ora che sai come nascono queste cifre, vai a cercarci dentro qualcosa — il tuo compleanno, una data, una sequenza a caso.</p>
+      </div>
+      <a class="btn" href="decimali/index.html">Esplora i decimali →</a>
+    </div>
+    <p class="coming-soon">In arrivo: una seconda pagina dedicata alla storia e alle caratteristiche di π, √2 e del numero aureo — qui ci siamo concentrati solo su come si calcolano.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — matematica da guardare, prima ancora che da leggere</p>
+  </div>
+</footer>
+
+</body>
+</html>

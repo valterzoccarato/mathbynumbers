@@ -17,6 +17,13 @@
   .site-nav .lang-switch a{padding:4px 9px;border-radius:5px;border:1px solid #232733;}
   .site-nav .lang-switch a.current{background:#7c9eff;color:#0d0f14;border-color:#7c9eff;}
   .site-nav .back{margin-right:16px;}
+  .theory-callout{
+    font-size:14px;color:#9aa4b8;background:rgba(124,158,255,0.08);
+    border:1px solid rgba(124,158,255,0.25);border-radius:8px;
+    padding:10px 16px;display:inline-block;margin-top:4px;
+  }
+  .theory-callout a{color:#7c9eff;text-decoration:none;font-weight:600;}
+  .theory-callout a:hover{text-decoration:underline;}
   .site-nav .main-nav{display:flex;gap:22px;}
   .site-nav .main-nav a.active{color:#e8ecf4;}
 </style>
@@ -41,6 +48,10 @@
 <header>
   <h1><span class="pi" id="header-symbol">π</span> Explorer</h1>
   <p>Millions of decimal digits of mathematical constants, precomputed and searchable.</p>
+  <p class="theory-callout">
+    Want to know how these digits are calculated, both by hand and by computer?
+    <a href="../come-si-calcolano-i-decimali_en.html">Find out here →</a>
+  </p>
   <div class="header-controls">
     <div class="constant-tabs" id="constant-tabs"></div>
     <button id="view-toggle-btn" class="view-toggle">Joint view</button>
