@@ -28,6 +28,15 @@ function classify(n) {
     return 'normal';
 }
 
+// Quanti colpi servono per distruggere un mattone primo.
+// Il valore esatto ("tanti colpi quanto vale") va benissimo per i primi piccoli
+// (2,3,5,7 -> 2-7 colpi), ma per un primo come 97 diventerebbe assurdo (97 colpi!).
+// Sopra i 9, scaliamo: un colpo ogni 10 di valore, arrotondato per eccesso.
+function hitsNeeded(n) {
+    if (n <= 9) return n;
+    return Math.ceil(n / 10);
+}
+
 const BRICK_COLORS = {
     normal: '#4a90d9',
     prime: '#ff4444',
@@ -58,7 +67,7 @@ function cellCenterX(col) { return cellX(col) + CELL_W / 2; }
 function cellCenterY(row) { return cellY(row) + CELL_H / 2; }
 
 function makeBrick(value) {
-    return { value, type: classify(value), alive: true, flash: 0 };
+    return { value, type: classify(value), alive: true, flash: 0, hitsTaken: 0 };
 }
 
 function initGrid() {
@@ -85,16 +94,37 @@ function countAliveBricks() {
     return n;
 }
 
-// Cerca la cella vuota più vicina a (r,c), esplorando ad anelli crescenti
+function ballGridPos() {
+    const c = Math.floor((ball.x - GRID_MARGIN) / (CELL_W + CELL_GAP));
+    const r = Math.floor((ball.y - GRID_TOP) / (CELL_H + CELL_GAP));
+    return { r, c };
+}
+
+// Cerca la cella vuota più vicina a (r,c), esplorando ad anelli crescenti.
+// Esclude la cella dove si trova la pallina in questo momento e le sue
+// quattro adiacenti, cosi' un frammento appena nato non puo' mai chiuderla
+// in una tasca senza uscita.
 function findNearestEmptyCell(r, c) {
+    const bp = ballGridPos();
+    const forbidden = new Set([bp.r + ',' + bp.c]);
+    [[-1, 0], [1, 0], [0, -1], [0, 1]].forEach(([dr, dc]) => {
+        forbidden.add((bp.r + dr) + ',' + (bp.c + dc));
+    });
+
     for (let radius = 1; radius < ROWS + COLS; radius++) {
+        const candidates = [];
         for (let dr = -radius; dr <= radius; dr++) {
             for (let dc = -radius; dc <= radius; dc++) {
                 if (Math.abs(dr) !== radius && Math.abs(dc) !== radius) continue;
                 const nr = r + dr, nc = c + dc;
                 if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
-                if (!bricks[nr][nc]) return { r: nr, c: nc };
+                if (bricks[nr][nc]) continue;
+                if (forbidden.has(nr + ',' + nc)) continue;
+                candidates.push({ r: nr, c: nc });
             }
+        }
+        if (candidates.length > 0) {
+            return candidates[Math.floor(Math.random() * candidates.length)];
         }
     }
     return null;
@@ -130,6 +160,14 @@ let triplaExpire = 0;
 let primeBreakerCharges = 0;
 const TRIPLA_DURATION = 600;   // frame (~10s a 60fps)
 const WIDE_DURATION = 600;
+
+// Rete di sicurezza: se la pallina resta chiusa in una tasca (bug residuo
+// o accumulo sfortunato di frammenti), dopo qualche secondo senza essersi
+// spostata liberiamo un varco distruggendo un mattone vicino.
+let stuckWatchTimer = 0;
+let stuckWatchPos = { x: 0, y: 0 };
+const STUCK_THRESHOLD_FRAMES = 180; // ~3 secondi a 60fps
+const STUCK_MOVE_TOLERANCE = 40;    // pixel
 
 let capsules = []; // {x,y,type}
 const CAPSULE_TYPES = [
@@ -196,15 +234,13 @@ function destroyBrick(r, c, points) {
     updateScore();
 }
 
-function shockwaveNeighbors(r, c) {
+function flashNeighbors(r, c) {
     const deltas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
     deltas.forEach(([dr, dc]) => {
         const nr = r + dr, nc = c + dc;
         if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) return;
         const b = bricks[nr][nc];
-        if (b && b.alive && b.type !== 'prime') {
-            hitBrick(nr, nc, true);
-        }
+        if (b && b.alive) b.flash = 10;
     });
 }
 
@@ -217,8 +253,12 @@ function hitBrick(r, c, fromShockwave) {
             primeBreakerCharges--;
             updatePowerupHud();
             destroyBrick(r, c, primePoints(b.value));
-        } else {
-            b.flash = 8; // rimbalza soltanto, con un piccolo lampo visivo
+            return;
+        }
+        b.hitsTaken++;
+        b.flash = 6;
+        if (b.hitsTaken >= hitsNeeded(b.value)) {
+            destroyBrick(r, c, primePoints(b.value));
         }
         return;
     }
@@ -262,7 +302,11 @@ function hitBrick(r, c, fromShockwave) {
         updateScore();
     }
 
-    if (wasPower && !fromShockwave) shockwaveNeighbors(r, c);
+    if (wasPower && !fromShockwave) {
+        score += 25;
+        updateScore();
+        flashNeighbors(r, c);
+    }
 }
 
 // ==================== INPUT ====================
@@ -357,6 +401,38 @@ function updateBall() {
     }
 }
 
+function freeTrappedBall() {
+    const bp = ballGridPos();
+    const candidates = [];
+    for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+            const nr = bp.r + dr, nc = bp.c + dc;
+            if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
+            const b = bricks[nr][nc];
+            if (b && b.alive) candidates.push({ r: nr, c: nc });
+        }
+    }
+    if (candidates.length === 0) return;
+    const pick = candidates[Math.floor(Math.random() * candidates.length)];
+    const b = bricks[pick.r][pick.c];
+    destroyBrick(pick.r, pick.c, b.type === 'prime' ? primePoints(b.value) : SPLIT_POINTS);
+}
+
+function updateStuckWatchdog() {
+    if (ball.stuck) { stuckWatchTimer = 0; return; }
+    const moved = Math.hypot(ball.x - stuckWatchPos.x, ball.y - stuckWatchPos.y);
+    if (moved > STUCK_MOVE_TOLERANCE) {
+        stuckWatchPos = { x: ball.x, y: ball.y };
+        stuckWatchTimer = 0;
+    } else {
+        stuckWatchTimer++;
+        if (stuckWatchTimer > STUCK_THRESHOLD_FRAMES) {
+            freeTrappedBall();
+            stuckWatchTimer = 0;
+        }
+    }
+}
+
 function updateCapsules() {
     capsules = capsules.filter((cap) => {
         cap.y += cap.vy;
@@ -407,10 +483,18 @@ function drawBricks() {
             ctx.lineWidth = 1;
             ctx.strokeRect(x, y, CELL_W, CELL_H);
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 13px Courier New';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(b.value, x + CELL_W / 2, y + CELL_H / 2 + 1);
+            if (b.type === 'prime' && b.hitsTaken > 0) {
+                ctx.font = 'bold 12px Courier New';
+                ctx.fillText(b.value, x + CELL_W / 2, y + CELL_H / 2 - 5);
+                ctx.font = '10px Courier New';
+                ctx.fillStyle = '#ffe066';
+                ctx.fillText(b.hitsTaken + '/' + hitsNeeded(b.value), x + CELL_W / 2, y + CELL_H / 2 + 8);
+            } else {
+                ctx.font = 'bold 13px Courier New';
+                ctx.fillText(b.value, x + CELL_W / 2, y + CELL_H / 2 + 1);
+            }
         }
     }
 }
@@ -550,6 +634,7 @@ function gameLoop() {
     if (gameRunning) {
         updatePaddle();
         updateBall();
+        updateStuckWatchdog();
         updateCapsules();
         updatePowerTimers();
         checkLevelClear();
