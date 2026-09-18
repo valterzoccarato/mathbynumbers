@@ -124,6 +124,7 @@
         <div class="symbol">π</div>
         <h3>Archimedes' method</h3>
         <p>Around 250 BC, Archimedes trapped π between two regular polygons — one inscribed and one circumscribed around a circle. The more sides he added (he started at 6, went up to 96), the tighter the two polygons squeezed around the true value. With pen and paper, he managed to prove that π sits between 3.1408 and 3.1429.</p>
+        <p style="margin-top:10px;"><a href="#shanks" style="color:var(--teal);font-size:14px;">Read below how, almost two thousand years later, William Shanks calculated 707 digits of π by hand — but got it wrong after the 500th →</a></p>
       </div>
       <div class="method-card">
         <div class="symbol">√2</div>
@@ -146,7 +147,7 @@
     <div class="formula">x₄ = ½ ( x₃ + 2/x₃ ) = 1.4142135623746899...</div>
     <p>The true value of √2 is 1.4142135623730951... Watch what happens to the correct digits at each step: after x₁ we have 1 correct digit (the "4.1..."), after x₂ we have 2, after x₃ we have 5, and <strong>after just x₄ we already have 12</strong>. The correct digits roughly double with every step — that's what "quadratic convergence" means in practice. With about ten more steps, a human with pen and paper (or a computer) can reach hundreds of correct digits.</p>
 
-    <h3>What Shanks actually did, step by step</h3>
+    <h3 id="shanks">What Shanks actually did, step by step</h3>
     <p>Shanks wasn't calculating π by drawing polygons like Archimedes — he used a formula discovered in 1706 by the English mathematician John Machin, which reduces the problem to two infinite sums that are much more manageable:</p>
     <div class="formula">π / 4 = 4 · arctan(1/5) − arctan(1/239)</div>
     <p>Each arctangent is calculated with a series where every extra term refines the result:</p>
