@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Fibonacci sequence — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3; --ink:#1C1B18; --ink-soft:#5B584F;
+    --gold:#B8923C; --gold-soft:#EFE4C8; --teal:#2C5F56; --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  header{padding:28px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  nav.lang-switch{display:flex;gap:6px;}
+  nav.lang-switch a{color:var(--ink-soft);text-decoration:none;font-size:13px;padding:4px 9px;border-radius:5px;border:1px solid var(--line);}
+  nav.lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:38px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:600px;margin-top:18px;}
+
+  section.body-section{padding:48px 0;}
+  section.body-section:not(:first-of-type){border-top:1px solid var(--line);}
+  section.body-section h2{font-size:26px;margin-bottom:18px;}
+  section.body-section h3{font-size:18px;font-family:'Inter',sans-serif;font-weight:600;margin:26px 0 8px;}
+  section.body-section p{font-size:16px;color:var(--ink-soft);max-width:66ch;}
+  section.body-section p + p{margin-top:14px;}
+  section.body-section.tinted{background:#fff;}
+
+  .example-row{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;}
+  .example-row .dot{
+    width:44px;height:44px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Source Serif 4',serif;font-size:17px;font-weight:600;
+  }
+  .dot.prime{background:var(--gold-soft);color:var(--gold);}
+  .dot.composite{background:var(--teal-soft);color:var(--teal);}
+
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:19px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px auto;max-width:66ch;}
+
+  .timeline{border-left:2px solid var(--line);margin:24px 0 0 6px;padding-left:24px;}
+  .timeline-item{position:relative;padding-bottom:26px;}
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-item::before{
+    content:"";position:absolute;left:-30px;top:4px;
+    width:10px;height:10px;border-radius:50%;background:var(--gold);
+  }
+  .timeline-item .year{font-family:'Source Serif 4',serif;font-size:15px;color:var(--teal);font-weight:600;}
+  .timeline-item p{margin-top:4px;}
+
+  .conj-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px;}
+  .conj-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 22px;}
+  .conj-card h3{margin-top:0;font-size:16px;}
+  .conj-card p{font-size:14px;margin-top:8px;}
+  .conj-card .status{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:var(--gold);margin-top:10px;font-weight:600;}
+
+  .cta-card{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--teal-soft);border-radius:12px;padding:28px 30px;margin-top:8px;
+  }
+  .cta-card h3{margin:0 0 6px;font-size:19px;}
+  .cta-card p{margin:0;font-size:14px;max-width:46ch;}
+  .cta-card a.btn{
+    flex-shrink:0;background:var(--teal);color:#fff;text-decoration:none;
+    padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;
+  }
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .hero h1{font-size:29px;}
+    .conj-grid{grid-template-columns:1fr;}
+    .cta-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="index.html">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria_en.html" class="active">Theory</a>
+      <a href="interazioni_en.html">Interactive</a>
+      <a href="giochi_en.html">Games</a>
+    </nav>
+    <nav class="lang-switch">
+      <a href="la-sequenza-di-fibonacci.html">IT</a>
+      <a href="la-sequenza-di-fibonacci_en.html" class="current">EN</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>The simplest rule that generates infinity</h1>
+    <p class="lead">Every number is the sum of the two before it. That's it — nothing more is needed to generate a sequence that Indian mathematicians were already studying a thousand years before Fibonacci, that hides in the arrangement of sunflower seeds, and that still holds properties that continue to surprise.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>One rule, endless consequences</h2>
+    <p>The definition is disarmingly simple: start with 1 and 1, and every following number is the sum of the two before it. 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144... The site's interactive page already tells the story of how this rule draws a spiral and converges toward the golden ratio — here we widen the view instead: where this sequence really comes from, and what else it can do beyond the spiral.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <h2>Older than the name suggests</h2>
+    <p class="wrap" style="max-width:66ch;padding:0;">The name comes from Leonardo Fibonacci and his 1202 <em>Liber Abaci</em> — but the sequence already existed, in a context that had nothing to do with commercial arithmetic.</p>
+    <p class="wrap" style="max-width:66ch;padding:0;margin-top:14px;">Centuries earlier, Sanskrit grammarians studied poetic meters: how many sequences of long and short syllables can fill a verse of a given duration? Pingala (around the 2nd century BC), and more explicitly Virahanka, Gopala, and Hemachandra in the following centuries, arrived at exactly the same sequence of numbers — not to count rabbits, but to count rhythms. The Indian mathematician Hemachandra described it in full nearly fifty years before Fibonacci was even born.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <h2>Properties that keep surprising</h2>
+
+    <h3>Only one shared divisor</h3>
+    <p>The greatest common divisor of two Fibonacci numbers is itself a Fibonacci number — and its position matches exactly the greatest common divisor of the two original positions:</p>
+    <div class="formula">MCD(F<sub>m</sub>, F<sub>n</sub>) = F<sub>MCD(m,n)</sub></div>
+    <p>For example, GCD(F₁₂, F₁₈) = GCD(144, 2584) = 8, and indeed GCD(12,18) = 6, and F₆ = 8. The pattern holds every time, for any pair of positions.</p>
+
+    <h3>Only one way to break down every number</h3>
+    <p>Zeckendorf's theorem says every positive integer can be written as a sum of non-consecutive Fibonacci numbers in exactly one way. For example, 100 = 89 + 8 + 3 — and no other combination of non-consecutive Fibonacci numbers gives the same result. It's a kind of alternative number system, hidden inside the decimal one.</p>
+
+    <h3>An almost-square that's always off by exactly one</h3>
+    <p>Cassini's identity (1680) links three consecutive Fibonacci numbers in an almost magical way:</p>
+    <div class="formula">F<sub>n-1</sub> · F<sub>n+1</sub> − F<sub>n</sub>² = (−1)ⁿ</div>
+    <p>The product of the two neighbors and the square of the middle number always differ by exactly 1, alternating sign. It's the basis of a classic geometric "paradox": you can cut an 8×8 square into four pieces and rearrange them into a 5×13 rectangle that looks like it has the same area — but it doesn't, it's off by exactly one unit, hidden in how the cuts are arranged.</p>
+
+    <h3>Sideways in Pascal's triangle</h3>
+    <p>Adding up the numbers along the shallow diagonals of Pascal's triangle, the one made of binomial coefficients, gives you the Fibonacci sequence right back — a connection that at first glance has nothing to do with rabbits or spirals, and yet it's the exact same sequence.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <h2>Other hiding places in nature</h2>
+    <p class="wrap" style="max-width:66ch;padding:0;">The interactive page already covers shells, sunflowers, and galaxies. Two lesser-known examples:</p>
+
+    <h3>The bee family tree</h3>
+    <p>Male bees (drones) hatch from unfertilized eggs: they have a mother, but no father. Females hatch from fertilized eggs: they have both. The result: the number of ancestors a drone has, generation after generation, is exactly 1, 1, 2, 3, 5, 8, 13... the Fibonacci sequence, generated not by an imposed mathematical rule but by the plain biology of reproduction.</p>
+
+    <h3>The angle that never repeats</h3>
+    <p>Many plants arrange their leaves around the stem by rotating roughly 137.5° each time — the golden angle, closely tied to the ratio between consecutive Fibonacci numbers. Why that particular angle? Because it's the "most irrational" angle possible, the one that stays furthest from any simple fraction of a full turn — which means every new leaf ends up as far as possible from all the ones already grown, catching light with minimal overlap. It's not a coincidence: it's optimization, discovered by evolution long before the word "optimization" existed.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <div class="cta-card">
+      <div>
+        <h3>Watch it take shape</h3>
+        <p>All this theory clicks into place once you watch the spiral draw itself step by step, with the ratio closing in on φ in real time.</p>
+      </div>
+      <a class="btn" href="fibonacci_en.html">Explore the spiral →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — math to look at, before you even read it</p>
+  </div>
+</footer>
+
+</body>
+</html>
