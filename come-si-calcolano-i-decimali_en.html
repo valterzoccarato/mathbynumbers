@@ -137,9 +137,27 @@
       </div>
     </div>
 
-    <div class="note-card">
-      <strong>A human record</strong>: in 1873, William Shanks calculated 707 digits of π by hand — a project that took years. It wasn't until 1946 that someone noticed he'd made a calculation error, and every digit from the 528th onward was wrong. Nobody had caught it for nearly a century.
-    </div>
+    <h3>A concrete example: √2 step by step</h3>
+    <p>The description of the Babylonian method above is pretty compact — let's see it with real numbers, so it's clear what's actually happening. Start from any guess, even a rough one: let's try x₀ = 1.</p>
+    <div class="formula">x₀ = 1</div>
+    <div class="formula">x₁ = ½ ( 1 + 2/1 ) = 1.5</div>
+    <div class="formula">x₂ = ½ ( 1.5 + 2/1.5 ) = 1.41666...</div>
+    <div class="formula">x₃ = ½ ( 1.41666... + 2/1.41666... ) = 1.4142156862745...</div>
+    <div class="formula">x₄ = ½ ( x₃ + 2/x₃ ) = 1.4142135623746899...</div>
+    <p>The true value of √2 is 1.4142135623730951... Watch what happens to the correct digits at each step: after x₁ we have 1 correct digit (the "4.1..."), after x₂ we have 2, after x₃ we have 5, and <strong>after just x₄ we already have 12</strong>. The correct digits roughly double with every step — that's what "quadratic convergence" means in practice. With about ten more steps, a human with pen and paper (or a computer) can reach hundreds of correct digits.</p>
+
+    <h3>What Shanks actually did, step by step</h3>
+    <p>Shanks wasn't calculating π by drawing polygons like Archimedes — he used a formula discovered in 1706 by the English mathematician John Machin, which reduces the problem to two infinite sums that are much more manageable:</p>
+    <div class="formula">π / 4 = 4 · arctan(1/5) − arctan(1/239)</div>
+    <p>Each arctangent is calculated with a series where every extra term refines the result:</p>
+    <div class="formula">arctan(x) = x − x³/3 + x⁵/5 − x⁷/7 + x⁹/9 − ...</div>
+    <p>Let's try calculating the first terms of arctan(1/5) by hand, that is, with x = 0.2:</p>
+    <div class="formula">0.2 − 0.00266667 + 0.000064 − 0.00000183 + 0.00000006 = 0.19739556</div>
+    <p>Just five terms are enough to get to 0.19739556 — the true value is 0.19739556: seven digits already correct. The second arctangent, arctan(1/239), converges much faster still, because 1/239 is a tiny number (0.00418410): just the first term of the series already gives six correct digits (0.00418408 is the true value).</p>
+    <p>Putting the two pieces together with Machin's formula:</p>
+    <div class="formula">π ≈ 16 × 0.19739556 − 4 × 0.00418408 = 3.14159268</div>
+    <p>With just five terms on one side and one on the other, we're already at six correct digits of π (the true value starts 3.14159265...). Shanks did exactly this procedure — not with five terms, but with a few hundred, each one calculated by hand with nothing but long-form arithmetic (multiplications and divisions on paper, digit by digit) — until he reached 707 digits in total.</p>
+    <p>Somewhere, in the middle of thousands of manual operations repeated over years, a small arithmetic slip crept in. From that point on — digit number 528 — everything that followed was wrong, while still looking entirely plausible. Nobody noticed for 73 years, until in 1946 a separate calculation (this time with the help of a mechanical calculator) exposed the discrepancy.</p>
   </div>
 </section>
 
