@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numeri perfetti, amici e altre curiosità — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3; --ink:#1C1B18; --ink-soft:#5B584F;
+    --gold:#B8923C; --gold-soft:#EFE4C8; --teal:#2C5F56; --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  header{padding:24px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
+  .lang-switch{display:flex;gap:6px;align-items:center;}
+  .lang-switch a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:4px 8px;border-radius:5px;border:1px solid var(--line);}
+  .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:36px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:620px;margin-top:18px;}
+  .hero p.lead a{color:var(--teal);}
+
+  section.body-section{padding:48px 0;}
+  section.body-section:not(:first-of-type){border-top:1px solid var(--line);}
+  section.body-section h2{font-size:26px;margin-bottom:8px;}
+  section.body-section .kicker{font-size:13px;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);font-weight:600;margin-bottom:8px;display:block;}
+  section.body-section h3{font-size:17px;font-family:'Inter',sans-serif;font-weight:600;margin:24px 0 6px;}
+  section.body-section p{font-size:15.5px;color:var(--ink-soft);max-width:68ch;}
+  section.body-section p + p{margin-top:12px;}
+  section.body-section.tinted{background:#fff;}
+
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:18px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px auto;max-width:68ch;}
+  section.body-section.tinted .formula{background:var(--cream);}
+
+  .swatch-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);margin-bottom:6px;}
+  .swatch-tag .dot{width:11px;height:11px;border-radius:3px;}
+
+  .note-card{background:var(--teal-soft);border-radius:10px;padding:16px 20px;margin-top:16px;font-size:14px;color:var(--ink);}
+  .note-card strong{color:var(--teal);}
+
+  .cta-card{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--teal-soft);border-radius:12px;padding:28px 30px;
+  }
+  .cta-card h3{margin:0 0 6px;font-size:19px;}
+  .cta-card p{margin:0;font-size:14px;max-width:46ch;}
+  .cta-card a.btn{
+    flex-shrink:0;background:var(--teal);color:#fff;text-decoration:none;
+    padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;
+  }
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .hero h1{font-size:28px;}
+    .cta-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="it.html">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria.html" class="active">Teoria</a>
+      <a href="interazioni.html">Interazioni</a>
+      <a href="giochi.html">Giochi</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="numeri-speciali.html" class="current">IT</a>
+      <a href="numeri-speciali_en.html">EN</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Dodici modi diversi di essere un numero interessante</h1>
+    <p class="lead">Alcune di queste categorie le studiavano già i Pitagorici, duemilacinquecento anni fa. Altre sono nate insieme ai computer, negli ultimi decenni. <a href="tavola-numeri.html">Se non l'hai già fatto, prova prima la griglia interattiva →</a></p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <span class="kicker">Numeri e i loro divisori</span>
+    <h2>Perfetti, amichevoli, amici</h2>
+    <p>Questa famiglia di categorie nasce tutta dalla stessa domanda: cosa succede se sommi i divisori propri di un numero (cioè tutti tranne il numero stesso) e confronti il risultato con il numero di partenza?</p>
+
+    <h3>Numeri perfetti</h3>
+    <p>Se la somma dei divisori propri torna esattamente uguale al numero, è "perfetto". 6 = 1+2+3. 28 = 1+2+4+7+14. I Pitagorici li consideravano letteralmente perfetti, nel senso morale del termine — un'idea che è sopravvissuta nel nome fino a oggi. Euclide dimostrò come costruirne alcuni a partire dai primi di Mersenne; duemila anni dopo, Eulero dimostrò che quella costruzione li genera <em>tutti</em> — almeno tutti quelli pari. Se esistano perfetti dispari, nessuno lo sa ancora.</p>
+
+    <h3>Numeri amichevoli</h3>
+    <p>Una coppia di numeri è amichevole quando la somma dei divisori propri dell'uno dà esattamente l'altro, e viceversa. La coppia più piccola, 220 e 284, era già nota ai Pitagorici, che ci vedevano un simbolo di amicizia perfetta — al punto che nell'antichità si scambiavano talismani con questi due numeri incisi sopra.</p>
+
+    <h3>Numeri amici</h3>
+    <p>Un'idea più recente (Novecento) generalizza il concetto: invece di formare coppie dirette, due numeri sono "amici" se condividono lo stesso rapporto tra la somma di tutti i loro divisori (se stessi incluso, stavolta) e il numero stesso — la loro "abbondanza relativa". È una parentela più larga e meno esclusiva delle coppie amichevoli classiche. Nella griglia di questo sito, entro i primi 300 numeri, se ne trovano ben cinque coppie.</p>
+    <div class="note-card">
+      <strong>E i numeri solitari?</strong> Sono semplicemente tutti gli altri — quelli che non condividono il proprio rapporto con nessun altro numero. È la condizione più comune in assoluto: tutti i numeri primi sono automaticamente solitari, il che li rende la maggioranza schiacciante tra i numeri piccoli. Per questo, nella griglia interattiva, non li abbiamo messi in evidenza: evidenziare il 90% dei numeri non aiuta a vedere nulla.
+    </div>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <span class="kicker">Primi speciali</span>
+    <h2>I primi di Mersenne</h2>
+    <p>Un numero primo della forma 2^p − 1, dove anche p è primo, si chiama primo di Mersenne, dal nome del frate francese che li studiò nel Seicento. Non tutti i numeri di questa forma sono primi — 2¹¹−1 = 2047 = 23 × 89, per esempio — ma quando lo sono, c'è un motivo concreto per cercarli proprio in questa forma: esiste un test di primalità (il test di Lucas-Lehmer) capace di verificarli molto più velocemente di un test generico, il che li rende i migliori candidati per i record di "numero primo più grande conosciuto". Il record attuale ha oltre 41 milioni di cifre, ed è — non a caso — un primo di Mersenne.</p>
+    <p>Entro i primi 300 numeri ne trovi solo quattro: 3, 7, 31, 127. Il quinto, 8191, è già troppo grande per la nostra griglia.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <span class="kicker">Numeri figurati</span>
+    <h2>Triangolari e quadrati</h2>
+    <p>I Pitagorici disponevano letteralmente i numeri come forme geometriche fatte di sassolini — da qui il nome "numeri figurati". Un numero triangolare è quello che serve per riempire un triangolo equilatero di puntini, riga per riga: 1, poi 1+2=3, poi 1+2+3=6, e così via.</p>
+    <div class="formula">T<sub>k</sub> = k(k+1) / 2</div>
+    <p>Un numero quadrato, allo stesso modo, è quello che riempie un quadrato di puntini: 1, 4, 9, 16... Una proprietà che i Pitagorici trovavano magica: ogni numero quadrato è la somma di due triangolari consecutivi. Prova con 16 = 6 + 10 — funziona sempre, per qualunque quadrato.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <span class="kicker">Curiosità combinatorie e ricreative</span>
+    <h2>Catalan, palindromi, felici, narcisisti</h2>
+
+    <h3>Numeri di Catalan</h3>
+    <p>1, 1, 2, 5, 14, 42, 132... crescono in fretta, e compaiono in un numero sorprendente di problemi di conteggio apparentemente scollegati tra loro: in quanti modi puoi disporre delle parentesi bilanciate, in quanti modi puoi dividere un poligono in triangoli tracciando diagonali che non si incrociano, in quanti modi puoi far salire e scendere un percorso senza mai andare sotto il livello di partenza. Sono così ubique in combinatoria che i matematici li considerano quasi un "numero universale" del contare.</p>
+
+    <h3>Numeri palindromi</h3>
+    <p>Si leggono uguali da sinistra a destra e da destra a sinistra — 131, 282. La domanda ricreativa più famosa che li riguarda: partendo da un numero qualsiasi, sommandolo al suo "rovescio" ripetutamente, si arriva sempre prima o poi a un palindromo? Per la stragrande maggioranza dei numeri sì, quasi sempre in pochi passaggi. Ma 196 resiste: nessuno è mai riuscito a farlo diventare palindromo, nemmeno dopo centinaia di milioni di passaggi calcolati al computer — e nessuno ha dimostrato che sia impossibile.</p>
+
+    <h3>Numeri felici</h3>
+    <p>Prendi un numero, somma i quadrati delle sue cifre, ripeti con il risultato. Se prima o poi arrivi a 1, il numero di partenza è "felice". Se invece entri in un ciclo che non tocca mai 1 (e succede sempre, per i numeri che non sono felici — il ciclo 4→16→37→58→89→145→42→20→4 cattura tutti gli infelici), il numero è "infelice". Il nome è puramente giocoso: non c'è nulla di psicologico dietro, solo una ricreazione numerica nata negli anni Settanta.</p>
+
+    <h3>Numeri narcisisti</h3>
+    <p>Un numero che è uguale alla somma delle proprie cifre, ciascuna elevata al numero di cifre totali. 153 = 1³ + 5³ + 3³ = 1 + 125 + 27. Il nome viene dal mito di Narciso: il numero, in un certo senso, "si ammira" ricostruendo se stesso dai propri pezzi.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wide">
+    <div class="cta-card">
+      <div>
+        <h3>Torna a vederli tutti insieme</h3>
+        <p>Accendi e spegni le categorie nella griglia interattiva per vedere quanto spesso si sovrappongono — alcuni numeri sono speciali in più di un modo contemporaneamente.</p>
+      </div>
+      <a class="btn" href="tavola-numeri.html">Vai alla griglia →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — matematica da guardare, prima ancora che da leggere</p>
+  </div>
+</footer>
+
+</body>
+</html>

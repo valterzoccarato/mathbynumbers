@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfect, friendly, and other curious numbers — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3; --ink:#1C1B18; --ink-soft:#5B584F;
+    --gold:#B8923C; --gold-soft:#EFE4C8; --teal:#2C5F56; --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  header{padding:24px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
+  .lang-switch{display:flex;gap:6px;align-items:center;}
+  .lang-switch a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:4px 8px;border-radius:5px;border:1px solid var(--line);}
+  .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .hero{padding:64px 0 40px;}
+  .hero h1{font-size:36px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:620px;margin-top:18px;}
+  .hero p.lead a{color:var(--teal);}
+
+  section.body-section{padding:48px 0;}
+  section.body-section:not(:first-of-type){border-top:1px solid var(--line);}
+  section.body-section h2{font-size:26px;margin-bottom:8px;}
+  section.body-section .kicker{font-size:13px;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);font-weight:600;margin-bottom:8px;display:block;}
+  section.body-section h3{font-size:17px;font-family:'Inter',sans-serif;font-weight:600;margin:24px 0 6px;}
+  section.body-section p{font-size:15.5px;color:var(--ink-soft);max-width:68ch;}
+  section.body-section p + p{margin-top:12px;}
+  section.body-section.tinted{background:#fff;}
+
+  .formula{display:block;text-align:center;font-family:'Source Serif 4',serif;font-size:18px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:14px auto;max-width:68ch;}
+  section.body-section.tinted .formula{background:var(--cream);}
+
+  .swatch-tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);margin-bottom:6px;}
+  .swatch-tag .dot{width:11px;height:11px;border-radius:3px;}
+
+  .note-card{background:var(--teal-soft);border-radius:10px;padding:16px 20px;margin-top:16px;font-size:14px;color:var(--ink);}
+  .note-card strong{color:var(--teal);}
+
+  .cta-card{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--teal-soft);border-radius:12px;padding:28px 30px;
+  }
+  .cta-card h3{margin:0 0 6px;font-size:19px;}
+  .cta-card p{margin:0;font-size:14px;max-width:46ch;}
+  .cta-card a.btn{
+    flex-shrink:0;background:var(--teal);color:#fff;text-decoration:none;
+    padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;
+  }
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:760px){
+    .hero h1{font-size:28px;}
+    .cta-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="index.html">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria_en.html" class="active">Theory</a>
+      <a href="interazioni_en.html">Interactive</a>
+      <a href="giochi_en.html">Games</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="numeri-speciali.html">IT</a>
+      <a href="numeri-speciali_en.html" class="current">EN</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Twelve different ways to be an interesting number</h1>
+    <p class="lead">Some of these categories were already being studied by the Pythagoreans, twenty-five hundred years ago. Others were born alongside computers, in the last few decades. <a href="tavola-numeri_en.html">If you haven’t already, try the interactive grid first →</a></p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <span class="kicker">Numbers and their divisors</span>
+    <h2>Perfect, amicable, friendly</h2>
+    <p>This whole family of categories comes from the same question: what happens if you add up a number’s proper divisors (everything except the number itself) and compare the result to the original number?</p>
+
+    <h3>Perfect numbers</h3>
+    <p>If the sum of the proper divisors comes back exactly equal to the number, it’s "perfect." 6 = 1+2+3. 28 = 1+2+4+7+14. The Pythagoreans considered them literally perfect, in the moral sense of the word — an idea that has survived in the name to this day. Euclid showed how to build some of them from Mersenne primes; two thousand years later, Euler proved that construction generates <em>all</em> of them — at least all the even ones. Whether odd perfect numbers exist at all, nobody knows yet.</p>
+
+    <h3>Amicable numbers</h3>
+    <p>A pair of numbers is amicable when the sum of one’s proper divisors gives exactly the other, and vice versa. The smallest pair, 220 and 284, was already known to the Pythagoreans, who saw it as a symbol of perfect friendship — to the point that people in antiquity exchanged talismans engraved with these two numbers.</p>
+
+    <h3>Friendly numbers</h3>
+    <p>A more recent idea (20th century) generalizes the concept: instead of forming direct pairs, two numbers are "friends" if they share the same ratio between the sum of all their divisors (including themselves, this time) and the number itself — their "relative abundance." It’s a broader, less exclusive kinship than classic amicable pairs. In this site’s grid, within the first 300 numbers, you’ll find as many as five such pairs.</p>
+    <div class="note-card">
+      What about solitary numbers? They’re simply everything else — numbers that don’t share their ratio with any other number. It’s the most common condition by far: every prime number is automatically solitary, which makes them the overwhelming majority among small numbers. That’s why we didn’t highlight them in the interactive grid: highlighting 90% of the numbers doesn’t help you see anything.
+    </div>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <span class="kicker">Special primes</span>
+    <h2>Mersenne primes</h2>
+    <p>A prime number of the form 2^p − 1, where p is also prime, is called a Mersenne prime, after the French friar who studied them in the 17th century. Not every number of this form is prime — 2¹¹−1 = 2047 = 23 × 89, for instance — but when it is, there’s a concrete reason to look for primes in exactly this form: there’s a primality test (the Lucas-Lehmer test) that can verify them far faster than a generic test, which makes them the best candidates for "largest known prime" records. The current record has over 41 million digits, and — unsurprisingly — it’s a Mersenne prime.</p>
+    <p>Within the first 300 numbers you’ll find only four: 3, 7, 31, 127. The fifth, 8191, is already too big for our grid.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <span class="kicker">Figurate numbers</span>
+    <h2>Triangular and square numbers</h2>
+    <p>The Pythagoreans literally arranged numbers as geometric shapes made of pebbles — hence the name "figurate numbers." A triangular number is the one you need to fill an equilateral triangle of dots, row by row: 1, then 1+2=3, then 1+2+3=6, and so on.</p>
+    <div class="formula">T<sub>k</sub> = k(k+1) / 2</div>
+    <p>A square number, in the same way, is the one that fills a square of dots: 1, 4, 9, 16... A property the Pythagoreans found almost magical: every square number is the sum of two consecutive triangular numbers. Try 16 = 6 + 10 — it works every time, for any square.</p>
+  </div>
+</section>
+
+<section class="body-section tinted">
+  <div class="wide">
+    <span class="kicker">Combinatorial and recreational curiosities</span>
+    <h2>Catalan, palindromic, happy, narcissistic</h2>
+
+    <h3>Catalan numbers</h3>
+    <p>One, 1, 2, 5, 14, 42, 132... they grow fast, and turn up in a surprising number of counting problems that seem completely unrelated to each other: how many ways to arrange balanced parentheses, how many ways to cut a polygon into triangles with non-crossing diagonals, how many ways to draw a path that goes up and down without ever dropping below its starting level. They’re so ubiquitous in combinatorics that mathematicians treat them almost as a "universal number" of counting.</p>
+
+    <h3>Palindromic numbers</h3>
+    <p>They read the same forwards and backwards — 131, 282. The most famous recreational question about them: starting from any number, repeatedly adding it to its own "reverse," do you always eventually reach a palindrome? For the vast majority of numbers, yes, almost always within a few steps. But 196 resists: nobody has ever managed to turn it into a palindrome, not even after hundreds of millions of computer-calculated steps — and nobody has proven it’s impossible either.</p>
+
+    <h3>Happy numbers</h3>
+    <p>Take a number, add up the squares of its digits, repeat with the result. If you eventually reach 1, the starting number is "happy." If instead you fall into a loop that never touches 1 (which always happens for numbers that aren’t happy — the cycle 4→16→37→58→89→145→42→20→4 catches every unhappy number), the number is "unhappy." The name is purely playful: there’s nothing psychological behind it, just a numerical recreation born in the 1970s.</p>
+
+    <h3>Narcissistic numbers</h3>
+    <p>A number equal to the sum of its own digits, each raised to the power of the total digit count. 153 = 1³ + 5³ + 3³ = 1 + 125 + 27. The name comes from the myth of Narcissus: the number, in a sense, "admires itself" by reconstructing itself from its own pieces.</p>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wide">
+    <div class="cta-card">
+      <div>
+        <h3>Go back and see them all together</h3>
+        <p>Switch categories on and off in the interactive grid to see how often they overlap — some numbers are special in more than one way at once.</p>
+      </div>
+      <a class="btn" href="tavola-numeri_en.html">Go to the grid →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — math to look at, before you even read it</p>
+  </div>
+</footer>
+
+</body>
+</html>

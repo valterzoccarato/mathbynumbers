@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The grid of special numbers — mathbynumbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F3; --ink:#1C1B18; --ink-soft:#5B584F;
+    --gold:#B8923C; --gold-soft:#EFE4C8; --teal:#2C5F56; --teal-soft:#E3EEEB;
+    --line:#E5E1D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:500;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1200px;margin:0 auto;padding:0 24px;}
+
+  header{padding:28px 0;border-bottom:1px solid var(--line);}
+  header .wide{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .logo{font-family:'Source Serif 4',serif;font-size:19px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;color:inherit;}
+  .main-nav{display:flex;gap:26px;}
+  .main-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;}
+  .main-nav a:hover{color:var(--ink);}
+  .main-nav a.active{color:var(--teal);}
+  .lang-switch{display:flex;gap:6px;}
+  .lang-switch a{margin-left:0 !important;padding:4px 8px;border-radius:5px;border:1px solid var(--line);font-size:13px;color:var(--ink-soft);text-decoration:none;}
+  .lang-switch a.current{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .hero{padding:56px 0 16px;}
+  .hero h1{font-size:36px;line-height:1.25;max-width:680px;letter-spacing:-0.01em;}
+  .hero p.lead{font-size:17px;color:var(--ink-soft);max-width:640px;margin-top:16px;}
+  .hero p.lead a{color:var(--teal);}
+
+  .table-layout{display:flex;gap:32px;padding:32px 0 56px;flex-wrap:wrap;align-items:flex-start;}
+
+  .toggle-panel{flex:0 0 250px;}
+  .toggle-panel h3{font-size:13px;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);margin-bottom:12px;}
+  .toggle-btn{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    padding:9px 12px;margin-bottom:6px;border-radius:8px;border:1px solid var(--line);
+    background:#fff;cursor:pointer;font-size:13.5px;font-family:'Inter',sans-serif;color:var(--ink);
+  }
+  .toggle-btn .swatch{width:13px;height:13px;border-radius:4px;flex-shrink:0;border:1px solid rgba(0,0,0,0.15);}
+  .toggle-btn .count{margin-left:auto;color:var(--ink-soft);font-size:11.5px;}
+  .toggle-btn.active{box-shadow:0 0 0 1.5px var(--btn-color) inset;background:var(--btn-bg);}
+  .toggle-btn:hover{border-color:var(--ink-soft);}
+  .reset-btn{
+    display:block;width:100%;text-align:center;margin-top:10px;padding:8px;
+    border-radius:8px;border:1px solid var(--line);background:none;color:var(--ink-soft);
+    font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;
+  }
+
+  .grid-area{flex:1;min-width:280px;}
+  .number-grid{
+    display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px;
+  }
+  .number-cell{
+    aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+    font-size:10.5px;border-radius:3px;background:#fff;border:1px solid var(--line);
+    color:var(--ink-soft);transition:transform .08s ease;cursor:default;
+  }
+  .number-cell:hover{transform:scale(1.25);z-index:2;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+  .number-cell.hit{color:#fff;font-weight:600;border-color:transparent;}
+
+  .grid-hint{font-size:13px;color:var(--ink-soft);margin-top:14px;}
+
+  section.body-section{padding:48px 0;border-top:1px solid var(--line);}
+  section.body-section h2{font-size:24px;margin-bottom:14px;}
+  section.body-section p{font-size:15px;color:var(--ink-soft);max-width:66ch;}
+
+  .cta-card{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--teal-soft);border-radius:12px;padding:26px 28px;
+  }
+  .cta-card h3{margin:0 0 6px;font-size:18px;}
+  .cta-card p{margin:0;font-size:14px;max-width:46ch;}
+  .cta-card a.btn{
+    flex-shrink:0;background:var(--teal);color:#fff;text-decoration:none;
+    padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;
+  }
+
+  footer{padding:36px 0;border-top:1px solid var(--line);}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (max-width:900px){
+    .table-layout{flex-direction:column;}
+    .toggle-panel{flex:none;width:100%;}
+    .number-grid{grid-template-columns:repeat(15,minmax(0,1fr));}
+  }
+  @media (max-width:500px){
+    .number-grid{grid-template-columns:repeat(10,minmax(0,1fr));}
+    .hero h1{font-size:27px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wide">
+    <a class="logo" href="index.html" style="text-decoration:none;color:inherit;">mathbynumbers</a>
+    <nav class="main-nav">
+      <a href="teoria_en.html">Theory</a>
+      <a href="interazioni_en.html" class="active">Interactive</a>
+      <a href="giochi_en.html">Games</a>
+    </nav>
+    <nav class="lang-switch"><a href="tavola-numeri.html">IT</a><a href="tavola-numeri_en.html" class="current">EN</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>One grid, twelve ways to be special</h1>
+    <p class="lead">The numbers from 1 to 300, all together. Switch on one or more categories to the side to see where they hide — and how often they end up overlapping. <a href="numeri-speciali_en.html">Want the theory behind each category? It’s here →</a></p>
+  </div>
+</section>
+
+<section class="table-layout wide">
+  <div class="toggle-panel">
+    <h3>Categories</h3>
+    <div id="toggle-list"></div>
+    <button class="reset-btn" id="resetBtn">Turn off all</button>
+    <p class="grid-hint">Hover over a number to see which active categories it belongs to.</p>
+  </div>
+  <div class="grid-area">
+    <div class="number-grid" id="numberGrid"></div>
+  </div>
+</section>
+
+<section class="body-section">
+  <div class="wrap">
+    <div class="cta-card">
+      <div>
+        <h3>Why they’re special</h3>
+        <p>Every category has a story — some 2,500 years old, others born with computers. The theory page tells them all.</p>
+      </div>
+      <a class="btn" href="numeri-speciali_en.html">Read the theory →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <p>mathbynumbers — math to look at, before you even read it</p>
+  </div>
+</footer>
+
+<script>
+const N = 300;
+
+function sigma(n){
+  let s = 0;
+  for(let i=1;i<=n;i++) if(n % i === 0) s += i;
+  return s;
+}
+function gcd(a,b){ while(b){ [a,b]=[b, a%b]; } return a; }
+function isPrimeCheck(n){
+  if(n<2) return false;
+  for(let i=2;i*i<=n;i++) if(n%i===0) return false;
+  return true;
+}
+function sieve(max){
+  const isP = new Array(max+1).fill(true);
+  isP[0]=isP[1]=false;
+  for(let i=2;i*i<=max;i++) if(isP[i]) for(let j=i*i;j<=max;j+=i) isP[j]=false;
+  return isP;
+}
+function isPalindrome(n){ const s=String(n); return s === s.split('').reverse().join(''); }
+function isHappy(n){
+  const seen = new Set();
+  while(n !== 1 && !seen.has(n)){
+    seen.add(n);
+    n = String(n).split('').reduce((a,d)=>a + Number(d)*Number(d), 0);
+  }
+  return n === 1;
+}
+function isNarcissistic(n){
+  const s = String(n), p = s.length;
+  return s.split('').reduce((a,d)=>a + Math.pow(Number(d), p), 0) === n;
+}
+
+// ---------- calcolo degli insiemi ----------
+const isPrimeArr = sieve(N);
+const primesSet = new Set();
+for(let i=2;i<=N;i++) if(isPrimeArr[i]) primesSet.add(i);
+
+const mersenneSet = new Set();
+[2,3,5,7,11,13].forEach(p=>{
+  const v = Math.pow(2,p) - 1;
+  if(v <= N && isPrimeCheck(v)) mersenneSet.add(v);
+});
+
+const sigmaCache = {};
+function sig(n){ if(sigmaCache[n]===undefined) sigmaCache[n]=sigma(n); return sigmaCache[n]; }
+
+const perfectSet = new Set();
+for(let n=1;n<=N;n++) if(sig(n) === 2*n) perfectSet.add(n);
+
+const amicableSet = new Set();
+for(let a=1;a<=N;a++){
+  const b = sig(a) - a;
+  if(b > 0 && b !== a && sig(b) - b === a){
+    amicableSet.add(a);
+    if(b <= N) amicableSet.add(b);
+  }
+}
+
+const friendlySet = new Set();
+{
+  const ratioMap = new Map();
+  const extended = N; // basta l'intervallo stesso per trovare coppie interne
+  for(let n=1;n<=extended;n++){
+    const s = sig(n);
+    const g = gcd(s,n);
+    const key = (s/g) + '/' + (n/g);
+    if(!ratioMap.has(key)) ratioMap.set(key, []);
+    ratioMap.get(key).push(n);
+  }
+  ratioMap.forEach((arr,key)=>{
+    if(arr.length > 1 && key !== '2/1'){
+      arr.forEach(x=>{ if(x<=N) friendlySet.add(x); });
+    }
+  });
+}
+
+const triangularSet = new Set();
+for(let k=1; k*(k+1)/2 <= N; k++) triangularSet.add(k*(k+1)/2);
+
+const squareSet = new Set();
+for(let k=1; k*k <= N; k++) squareSet.add(k*k);
+
+const catalanRaw = [1,1,2,5,14,42,132,429,1430];
+const catalanSet = new Set(catalanRaw.filter(x=>x<=N));
+
+const palindromeSet = new Set();
+for(let n=1;n<=N;n++) if(isPalindrome(n)) palindromeSet.add(n);
+
+const happySet = new Set();
+for(let n=1;n<=N;n++) if(isHappy(n)) happySet.add(n);
+
+const narcissisticSet = new Set();
+for(let n=1;n<=N;n++) if(isNarcissistic(n)) narcissisticSet.add(n);
+
+const fibonacciSet = new Set();
+{
+  let a=1,b=1;
+  fibonacciSet.add(1);
+  while(b<=N){ fibonacciSet.add(b); [a,b]=[b,a+b]; }
+}
+
+// ---------- definizione categorie (ordine = priorita' colore in caso di sovrapposizione) ----------
+const CATEGORIES = [
+  { id:'perfetti',    label:'Perfect numbers',      color:'#B8923C', set:perfectSet,     desc:'Equal to the sum of their own proper divisors.' },
+  { id:'amichevoli',  label:'Numeri amichevoli',     color:'#2C5F56', set:amicableSet,    desc:'Coppie: la somma dei divisori dell\'uno dà l\'altro.' },
+  { id:'amici',       label:'Friendly numbers',       color:'#D85A30', set:friendlySet,    desc:'Share the same σ(n)/n ratio with another number.' },
+  { id:'mersenne',    label:'Mersenne primes',      color:'#7A4EB8', set:mersenneSet,    desc:'Primes of the form 2^p − 1.' },
+  { id:'catalan',     label:'Catalan numbers',      color:'#B83C6A', set:catalanSet,     desc:'Count balanced parenthesis arrangements, among many other things.' },
+  { id:'triangolari', label:'Triangular numbers',   color:'#3C6FB8', set:triangularSet,  desc:'Sum of the first k integers: 1, 3, 6, 10...' },
+  { id:'quadrati',    label:'Square numbers',       color:'#4E9B5C', set:squareSet,      desc:'k² for some integer k.' },
+  { id:'narcisisti',  label:'Narcissistic numbers', color:'#C75146', set:narcissisticSet,desc:'The sum of its own digits, each raised to the digit count, equals itself.' },
+  { id:'felici',      label:'Happy numbers',        color:'#C9A227', set:happySet,       desc:'Iterating the sum of squared digits eventually reaches 1.' },
+  { id:'palindromi',  label:'Palindromic numbers',  color:'#8A93A6', set:palindromeSet,  desc:'Read the same forwards and backwards.' },
+  { id:'fibonacci',   label:'Fibonacci numbers',    color:'#B87A3C', set:fibonacciSet,   desc:'Each number is the sum of the two before it.' },
+  { id:'primi',       label:'Prime numbers',        color:'#4A90D9', set:primesSet,      desc:'Divisible only by 1 and themselves.' },
+];
+
+const activeIds = new Set();
+
+function hexToRgba(hex, alpha){
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return 'rgba('+r+','+g+','+b+','+alpha+')';
+}
+
+function renderToggles(){
+  const list = document.getElementById('toggle-list');
+  list.innerHTML = '';
+  CATEGORIES.forEach(cat=>{
+    const btn = document.createElement('button');
+    btn.className = 'toggle-btn' + (activeIds.has(cat.id) ? ' active' : '');
+    btn.style.setProperty('--btn-color', cat.color);
+    btn.style.setProperty('--btn-bg', hexToRgba(cat.color, 0.08));
+    btn.title = cat.desc;
+    btn.innerHTML =
+      '<span class="swatch" style="background:'+cat.color+'"></span>' +
+      '<span>'+cat.label+'</span>' +
+      '<span class="count">'+cat.set.size+'</span>';
+    btn.addEventListener('click', ()=>{
+      if(activeIds.has(cat.id)) activeIds.delete(cat.id);
+      else activeIds.add(cat.id);
+      renderToggles();
+      renderGrid();
+    });
+    list.appendChild(btn);
+  });
+}
+
+function renderGrid(){
+  const grid = document.getElementById('numberGrid');
+  grid.innerHTML = '';
+  for(let n=1;n<=N;n++){
+    const cell = document.createElement('div');
+    cell.className = 'number-cell';
+    cell.textContent = n;
+
+    const matching = CATEGORIES.filter(c => activeIds.has(c.id) && c.set.has(n));
+    if(matching.length > 0){
+      cell.classList.add('hit');
+      cell.style.background = matching[0].color;
+      cell.title = matching.map(c=>c.label).join(' · ');
+    } else {
+      cell.title = '';
+    }
+    grid.appendChild(cell);
+  }
+}
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  activeIds.clear();
+  renderToggles();
+  renderGrid();
+});
+
+// Attiva "Numeri perfetti" di default, giusto per non partire da una griglia spenta
+activeIds.add('perfetti');
+renderToggles();
+renderGrid();
+</script>
+
+</body>
+</html>
